@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@layer base {
+  :root {
+    /* Core Colors */
+    --color-primary: 37 99 235;     /* Calm Blue #2563EB */
+    --color-secondary: 219 234 254; /* Soft Blue #DBEAFE */
+
+    /* Neutrals */
+    --color-bg: 255 255 255;        /* White */
+    --color-surface: 245 247 250;   /* Light Gray */
+    --color-text: 17 24 39;         /* Dark Gray */
+    --color-muted: 107 114 128;     /* Gray */
+
+    /* Accents */
+    --color-accent: 30 212 198;     /* Electric Teal */
+    --color-success: 22 163 74;     /* Soft Green */
+    --color-error: 220 38 38;       /* Soft Red */
+  }
+}
+
+@layer utilities {
+  .bg-primary {
+    background-color: rgb(var(--color-primary));
+  }
+  .text-primary {
+    color: rgb(var(--color-primary));
+  }
+  .text-main {
+    color: rgb(var(--color-text));
+  }
+  .text-muted {
+    color: rgb(var(--color-muted));
+  }
+  .bg-surface {
+    background-color: rgb(var(--color-surface));
+  }
+}

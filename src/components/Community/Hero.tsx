@@ -1,9 +1,7 @@
 import {
   MessageSquare,
   Sparkles,
-  ArrowRight,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 const Hero = () => {
   return (
           <section className="pt-28 pb-24 px-4 bg-gradient-to-b from-white to-blue-50/30">
@@ -34,13 +32,6 @@ const Hero = () => {
                 <MessageSquare className="w-6 h-6 mr-3" />
                 Join Discord Community
               </a>
-              <Link
-                to="#platforms"
-                className="px-10 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 inline-flex items-center justify-center"
-              >
-                <ArrowRight className="w-6 h-6 mr-3" />
-                Explore All Platforms
-              </Link>
             </div>
           </div>
 

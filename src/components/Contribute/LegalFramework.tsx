@@ -46,7 +46,7 @@ const LegalFramework = () => {
               {
                 title: "Security & Disclosure Policy",
                 description: "Protocols for responsibly disclosing security vulnerabilities and protecting user data.",
-                keyPoints: ["90-day disclosure policy", "Bug bounty eligibility", "Secure communication channels", "PTA compliance"],
+                keyPoints: ["90-day disclosure policy", "Bug bounty eligibility", "Secure communication channels"],
                 icon: <Lock className="w-8 h-8" />,
                 link: "/security"
               },

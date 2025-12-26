@@ -46,7 +46,7 @@ const FinalCta = () => {
           
           <div className="mt-12 pt-8 border-t border-gray-100">
             <p className="text-gray-500 text-sm">
-              Need help? Contact <a href="mailto:community@spurvancelabs.com" className="text-blue-600 hover:underline">community@spurvancelabs.com</a>
+              Need help? Contact <a href="mailto:info@spurvancelabs.com" className="text-blue-600 hover:underline">info@spurvancelabs.com</a>
             </p>
             <p className="text-gray-400 text-xs mt-2">
               All community members must agree to our Code of Conduct and Community Guidelines.

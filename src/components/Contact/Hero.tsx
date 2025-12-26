@@ -1,7 +1,7 @@
 import { 
   MessageSquare,
-  AlertTriangle,
-  CheckCircle,
+  // AlertTriangle,
+  // CheckCircle,
 } from "lucide-react";
 
 const Hero = () => {
@@ -26,7 +26,7 @@ const Hero = () => {
           </div>
 
           {/* Important Notice */}
-          <div className="max-w-4xl mx-auto mb-16">
+          {/* <div className="max-w-4xl mx-auto mb-16">
             <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl border-2 border-blue-200 p-8">
               <div className="flex items-start">
                 <AlertTriangle className="w-8 h-8 text-blue-600 mr-4 flex-shrink-0" />
@@ -49,7 +49,7 @@ const Hero = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
   )

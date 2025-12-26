@@ -3,7 +3,8 @@ import { Heart, Server, Shield, Award, Globe, Sparkles, ArrowRight, CheckCircle,
 import { useState } from "react";
 
 const Donate = () => {
-  const [hoveredCard, setHoveredCard] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+
 
   return (
     <>

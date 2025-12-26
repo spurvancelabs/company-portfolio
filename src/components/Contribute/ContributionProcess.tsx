@@ -8,7 +8,6 @@ import {
   UserCheck,
   Clock,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const ContributionProcess = () => {
   return (
@@ -89,13 +88,7 @@ const ContributionProcess = () => {
                     </div>
                   </div>
                   <p className="text-gray-600 mb-6">{item.description}</p>
-                  <Link
-                    to={item.link}
-                    className="inline-flex items-center text-blue-600 font-medium hover:text-blue-700"
-                  >
-                    <span>Get Started</span>
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
+
                 </div>
                 {index < 5 && (
                   <div className="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">

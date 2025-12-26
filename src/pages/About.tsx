@@ -4,6 +4,7 @@ import ProblemSolution from "../components/About/ProblemSolution";
 import OurApproach from "../components/About/OurApproach";
 import ProductPortfolio from "../components/About/ProductPortfolio";
 import TermsGovernance from "../components/About/TermsGovernance";
+import FinalCta from "../components/About/FinalCta"
 const About = () => {
   return (
     <>
@@ -17,6 +18,7 @@ const About = () => {
 <OurApproach/>
 <ProductPortfolio/>
 <TermsGovernance/>
+<FinalCta/>
     </>
   );
 };

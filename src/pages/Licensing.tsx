@@ -1,32 +1,21 @@
 import SEO from "../components/SEO";
 import {
   BookOpen,
-  Shield,
   Code,
   FileText,
-  ExternalLink,
   AlertTriangle,
   Scale,
   Lock,
-  Users,
   Globe,
-  Cpu,
-  Database,
-  Server,
-  Key,
   Mail,
   Building,
-  Award,
   ShieldCheck,
   FileSearch,
   ArrowRight,
-  Sparkles,
-  Zap,
   ScaleIcon,
   CheckCircle,
   XCircle,
   AlertCircle,
-  GitBranch,
   Layers
 } from "lucide-react";
 import { useState } from "react";

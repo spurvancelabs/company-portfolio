@@ -1,7 +1,4 @@
-import { 
-  ArrowRight,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+
 
 const TermsGovernance = () => {
   return (
@@ -51,30 +48,6 @@ const TermsGovernance = () => {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-3xl p-10 text-white">
-            <div className="max-w-3xl mx-auto text-center">
-              <h3 className="text-3xl font-bold mb-6">Join Pakistan's Digital Renaissance</h3>
-              <p className="text-blue-100 mb-8 text-lg">
-                We're looking for developers, designers, security researchers, and visionaries who believe Pakistan deserves its own digital infrastructure.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  to="/contribute"
-                  className="px-10 py-4 bg-white text-gray-900 font-semibold rounded-xl hover:bg-gray-100 hover:scale-[1.02] transition-all duration-300 inline-flex items-center justify-center"
-                >
-                  <span>Start Contributing</span>
-                  <ArrowRight className="w-5 h-5 ml-3" />
-                </Link>
-                <Link
-                  to="/careers"
-                  className="px-10 py-4 bg-transparent border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 hover:scale-[1.02] transition-all duration-300"
-                >
-                  View Open Roles
-                </Link>
-              </div>
-            </div>
           </div>
         </div>
       </section>

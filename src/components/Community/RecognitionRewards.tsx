@@ -1,9 +1,9 @@
 import {
   Trophy,
-  TrendingUp,
+  // TrendingUp,
   CheckCircle
 } from "lucide-react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 const RecognitionRewards = () => {
 
   const recognitionTiers = [
@@ -95,7 +95,7 @@ const RecognitionRewards = () => {
           </div>
 
           {/* Leaderboard Preview */}
-          <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-10">
+          {/* <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-10">
             <div className="flex flex-col md:flex-row justify-between items-center mb-8">
               <div>
                 <h3 className="text-3xl font-bold text-gray-900 mb-2">Community Leaderboard</h3>
@@ -131,7 +131,7 @@ const RecognitionRewards = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
   )

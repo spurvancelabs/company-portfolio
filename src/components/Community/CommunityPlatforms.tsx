@@ -1,8 +1,5 @@
 import {
   MessageSquare,
-  BookOpen,
-  Users2,
-  School,
   ExternalLink,
   ArrowRight,
   GitBranch,
@@ -31,7 +28,7 @@ const CommunityPlatforms = () => {
       guidelines: "Read #welcome and accept rules to access channels"
     },
     {
-      name: "Matrix (Federated)",
+      name: "Whatsapp",
       icon: <MessageCircle className="w-6 h-6" />,
       description: "Decentralized, privacy-focused communication platform",
       purpose: "Privacy discussions, security channels, federation",
@@ -40,36 +37,7 @@ const CommunityPlatforms = () => {
       color: "from-green-600 to-cyan-600",
       guidelines: "End-to-end encrypted rooms available"
     },
-    {
-      name: "Community Forum",
-      icon: <Users2 className="w-6 h-6" />,
-      description: "Structured discussions for proposals and RFCs",
-      purpose: "Technical proposals, governance discussions, announcements",
-      members: "200+ active participants",
-      link: "https://forum.spurvancelabs.com",
-      color: "from-blue-600 to-cyan-600",
-      guidelines: "Use appropriate categories for different topics"
-    },
-    {
-      name: "Documentation Portal",
-      icon: <BookOpen className="w-6 h-6" />,
-      description: "Comprehensive guides, API docs, and learning resources",
-      purpose: "Onboarding, technical reference, tutorials",
-      members: "Open access",
-      link: "https://docs.spurvancelabs.com",
-      color: "from-amber-600 to-orange-600",
-      guidelines: "Contributions via GitHub pull requests"
-    },
-    {
-      name: "University Chapters",
-      icon: <School className="w-6 h-6" />,
-      description: "Student-led communities at Pakistani universities",
-      purpose: "Local events, workshops, campus outreach",
-      members: "15+ university chapters",
-      link: "/community/chapters",
-      color: "from-red-600 to-pink-600",
-      guidelines: "Chapter guidelines and event protocols"
-    }
+
   ];
   return (
           <section id="platforms" className="py-24 px-4 bg-white">

@@ -35,7 +35,7 @@ const Hero = () => {
                 View GitHub Repositories
               </a>
               <Link
-                to="#process"
+                to="/community"
                 className="px-10 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 inline-flex items-center justify-center"
               >
                 <ArrowRight className="w-6 h-6 mr-3" />

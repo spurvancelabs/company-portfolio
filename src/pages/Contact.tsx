@@ -6,9 +6,6 @@ import SecurityCommunication from "../components/Contact/SecurityCommunication";
 import SEO from "../components/SEO";
 
 const Contact = () => {
-
-
-
   return (
     <>
       <SEO
@@ -22,6 +19,7 @@ const Contact = () => {
 <SecurityCommunication/>
 <AlternativeContact/>
 <FinalNotice/>
+   
     </>
   );
 };

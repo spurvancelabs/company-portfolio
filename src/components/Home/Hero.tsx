@@ -1,16 +1,17 @@
-import { Rocket, Shield, Cpu } from 'lucide-react';
+
+
+
+import { Shield, Cpu } from 'lucide-react';
 import {Link} from "react-router-dom"
 const Hero = () => {
   return (
     <section className="pt-20 pb-32 px-4 bg-[rgb(var(--color-bg))]">
       <div className="max-w-6xl mx-auto text-center">
-        <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-gradient-to-r from-[rgb(var(--color-secondary))] to-[rgb(var(--color-accent))] mb-6">
-          <Rocket className="w-6 h-6 text-[rgb(var(--color-primary))]" />
-        </div>
+
 
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[rgb(var(--color-text))] mb-6">
           Building{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[rgb(var(--color-primary))] to-[rgb(var(--color-accent))]">
+                    <span className=" bg-clip-text text-primary">
             Pakistan's
           </span>
           <br />

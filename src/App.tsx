@@ -15,6 +15,8 @@ import Community from "./pages/Community";
 import Contact from "./pages/Contact";
 import Donate from "./pages/Donate";
 import Licensing from "./pages/Licensing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsandServices from "./pages/TermsandServices";
 
 export default function App() {
   return (

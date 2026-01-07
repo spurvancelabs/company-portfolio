@@ -17,6 +17,7 @@ import Donate from "./pages/Donate";
 import Licensing from "./pages/Licensing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsandServices from "./pages/TermsandServices";
+import Cla from "./pages/Cla";
 
 export default function App() {
   return (
@@ -35,9 +36,11 @@ export default function App() {
             <Route path="/community" element={<Community />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/donate" element={<Donate />} />
+            // Todo Create These Pages
             <Route path="/licensing" element={<Licensing />} />
             <Route path="/terms" element={<TermsandServices />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/cla" element={<Cla />} />
           </Routes>
         </main>
 

@@ -36,6 +36,8 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/licensing" element={<Licensing />} />
+            <Route path="/terms" element={<TermsandServices />} />
+            <Route path="/" element={<PrivacyPolicy />} />
           </Routes>
         </main>
 

@@ -66,6 +66,20 @@ See the [Information Security Policy (ISP)](./SECURITY.md) for more details.
 
 ---
 
+## Legal & Policies
+
+Before contributing or using our Services, please review the following legal documents:
+
+- [License](./legal/LICENSE) – GNU AGPL v3.0 license terms.
+- [Code of Conduct](./legal/CODE_OF_CONDUCT.md) – expected community behavior.
+- [Contributor License Agreement (CLA)](./legal/CLA.md) – terms for contributions.
+- [Privacy Policy](./legal/PRIVACY_POLICY.md) – how we handle personal information.
+- [Terms of Service](./legal/TERMS_OF_SERVICE.md) – rules for using our services.
+- [Security Policy](./legal/SECURITY.md) – reporting vulnerabilities responsibly.
+- [Cookie Policy](./legal/COOKIE_POLICY.md) – how we use cookies and tracking.
+
+---
+
 ## Disclaimer
 
 This software is provided "as is", without warranty of any kind.  

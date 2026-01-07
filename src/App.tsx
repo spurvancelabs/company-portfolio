@@ -14,11 +14,12 @@ import Contribute from "./pages/Contribute";
 import Community from "./pages/Community";
 import Contact from "./pages/Contact";
 import Donate from "./pages/Donate";
+// TODO: WORK ON THESE FILES
 import Licensing from "./pages/Licensing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsandServices from "./pages/TermsandServices";
 import Cla from "./pages/Cla";
-
+import CodeOfConduct from "./pages/CodeOfConduct";
 export default function App() {
   return (
     <Router>
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="/terms" element={<TermsandServices />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/cla" element={<Cla />} />
+            <Route path="/code-of-conduct" element={<CodeOfConduct />} />
           </Routes>
         </main>
 

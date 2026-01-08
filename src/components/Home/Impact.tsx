@@ -12,7 +12,6 @@ import {
   Code, 
   Globe, 
   Sparkles,
-  // ArrowRight
 } from 'lucide-react';
 const Impact = () => {
   return (
@@ -47,7 +46,7 @@ const Impact = () => {
                 Sovereign Communications
               </h3>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                BABY&CHARSI-Chat: Pakistan's first end-to-end encrypted messaging platform built on open-source principles. No backdoors, no surveillance, just private conversations protected by Pakistani security standards.
+                Pakistan's first end-to-end encrypted messaging platform built on open-source principles. No backdoors, no surveillance, just private conversations protected by Pakistani security standards.
               </p>
               {/* <div className="flex items-center text-blue-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
                 <span>Learn about N-Chat</span>

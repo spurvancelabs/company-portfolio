@@ -28,6 +28,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsandServices from "./pages/TermsandServices";
 import Cla from "./pages/Cla";
 import CodeOfConduct from "./pages/CodeOfConduct";
+import Certificate from "./pages/Certificate";
 export default function App() {
   return (
     <Router>
@@ -51,6 +52,7 @@ export default function App() {
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/cla" element={<Cla />} />
             <Route path="/code-of-conduct" element={<CodeOfConduct />} />
+            <Route path="/certificate" element={<Certificate />} />
           </Routes>
         </main>
 

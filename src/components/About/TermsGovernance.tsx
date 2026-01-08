@@ -19,26 +19,20 @@ const TermsGovernance = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
             {[
               {
-                role: "Cybersecurity Architect",
+                role: "Founder & CEO/CTO",
                 name: "Abdullah Khaver",
                 bio: "Specializes in encryption protocols and secure system design. Previously worked on government security projects.",
                 focus: "Security Architecture"
               },
               {
-                role: "Product Design & Strategy",
+                role: "Co-founder & COO/CLO",
                 name: "Hamza Ajmal",
-                bio: "Leads UX research and product planning. Focuses on making complex security technology accessible.",
+                bio: "Leads UX research and product planning. Focuses on making complex security technology accessible and managing legal things.",
                 focus: "User Experience"
               },
-              {
-                role: "Media & Community",
-                name: "Abdullah Gafhoor",
-                bio: "Builds communities and communicates technical concepts. Manages open-source contributor relationships.",
-                focus: "Community Growth"
-              }
             ].map((member, idx) => (
               <div key={idx} className="p-8 bg-white rounded-3xl shadow-sm border border-gray-100">
                 <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 mb-6 flex items-center justify-center">

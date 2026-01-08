@@ -51,7 +51,7 @@ export default function App() {
             <Route path="/terms" element={<TermsandServices />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/cla" element={<Cla />} />
-            <Route path="/code-of-conduct" element={<CodeOfConduct />} />
+            <Route path="/conduct" element={<CodeOfConduct />} />
             <Route path="/certificate" element={<Certificate />} />
           </Routes>
         </main>

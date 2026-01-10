@@ -34,5 +34,5 @@ jobs:
           local-dir: dist/
 
           server-dir: ${{ secrets.FTP_TARGET }}
-          protocol: ftp
+          protocol: ftps
           dangerous-clean-slate: true

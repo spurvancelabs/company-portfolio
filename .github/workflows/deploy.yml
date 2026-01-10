@@ -44,3 +44,16 @@ jobs:
           server-dir: ${{ secrets.FTP_TARGET }}
           protocol: ftps
           dangerous-clean-slate: true
+
+      # 7️⃣ Purge NGINX cache (if exists)
+      - name: Purge NGINX cache
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: dummy/  # empty folder
+          server-dir: ${{ secrets.FTP_TARGET }}/cache  # path to domain cache folder
+          exclude: "*"       # prevent overwriting
+          remove: true       # delete cache folder

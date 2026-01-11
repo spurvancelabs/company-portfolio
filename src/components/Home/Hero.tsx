@@ -25,29 +25,10 @@ interface Feature {
   icon: React.ComponentType<any>;
 }
 
-// Placeholder image URLs - Replace these with your actual images
-const HERO_IMAGES = {
-  main: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80", // Tech team
-  pattern: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80", // Abstract tech pattern
-  dashboard: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80", // Dashboard UI
-}
-
-// Fallback SVG pattern if images fail to load
-const FallbackPattern = () => (
-  <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e5e7eb" strokeWidth="1"/>
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#grid)" />
-  </svg>
-);
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
   const heroRef = useRef<HTMLElement>(null);
   const { ref, inView } = useInView({ 
     threshold: 0.1,
@@ -64,28 +45,7 @@ const Hero = () => {
     }
   }, [inView]);
 
-  // Simulate loading and preload image
-  useEffect(() => {
-    const loadImage = () => {
-      const img = new Image();
-      img.src = HERO_IMAGES.main;
-      img.onload = () => {
-        setImageLoaded(true);
-        setIsLoading(false);
-      };
-      img.onerror = () => {
-        console.warn('Hero image failed to load, using fallback');
-        setImageLoaded(false);
-        setIsLoading(false);
-      };
-    };
 
-    const timer = setTimeout(() => {
-      loadImage();
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   // Responsive stats data
   const stats: StatCard[] = [
@@ -152,25 +112,7 @@ const Hero = () => {
     }
   };
 
-  const imageVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.8, ease: "easeOut" }
-    }
-  };
 
-  if (isLoading) {
-    return (
-      <section className="min-h-screen flex items-center justify-center bg-white pt-16"> {/* Add padding for sticky navbar */}
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading Spurvance Labs...</p>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section 
@@ -185,34 +127,32 @@ const Hero = () => {
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-white to-blue-50 pt-16" // Added pt-16 for sticky navbar
       aria-label="Hero Section"
     >
-      {/* Background with image */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/80 to-blue-50/70 z-10" />
-        
-        {/* Hero Image */}
-        <motion.div
-          variants={imageVariants}
-          initial="hidden"
-          animate={isVisible ? "visible" : "hidden"}
-          className="absolute inset-0"
-        >
-          {imageLoaded ? (
-            <img
-              src={HERO_IMAGES.main}
-              alt="Spurvance Labs team working on digital infrastructure"
-              className="w-full h-full object-cover object-center"
-              loading="eager"
-              onError={() => setImageLoaded(false)}
-            />
-          ) : (
-            <FallbackPattern />
-          )}
-        </motion.div>
+      {/* Background (NO IMAGES) */}
+<div className="absolute inset-0 overflow-hidden z-0">
+  {/* Base gradient */}
+  <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50 to-indigo-100" />
 
-        {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_1px_1px,#3B82F6_1px,transparent_0)] bg-[length:40px_40px] z-20" />
-      </div>
+  {/* Subtle grid pattern */}
+  <svg
+    className="absolute inset-0 w-full h-full opacity-10"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path
+          d="M 40 0 L 0 0 0 40"
+          fill="none"
+          stroke="#3B82F6"
+          strokeWidth="1"
+        />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </svg>
+
+  {/* Soft overlay */}
+  <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/40 to-transparent" />
+</div>
 
       {/* Floating tech elements - subtle version */}
       <div className="absolute inset-0 pointer-events-none z-30">

@@ -6,8 +6,8 @@
  * See LICENSE file for details.
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { NavLink, useLocation, Link } from 'react-router-dom';
-import { Heart, Menu, X, ArrowRight, ChevronDown, Sparkles, User, Settings, LogOut, Search, Bell } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { Heart, Menu, X, ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from "../Logo";
 import TopBar from './TopBar';
@@ -27,7 +27,6 @@ interface NavItem {
   hasDropdown?: boolean;
   dropdown?: DropdownItem[];
 }
-
 
 // ========== CONSTANTS ==========
 const productsDropdown: DropdownItem[] = [
@@ -116,9 +115,6 @@ const navItems: NavItem[] = [
   }
 ];
 
-
-
-
 // ========== COMPONENTS ==========
 interface DropdownProps {
   items: DropdownItem[];
@@ -141,7 +137,7 @@ const Dropdown: React.FC<DropdownProps> = ({ items, onClose, isMobile = false })
       transition={{ duration: 0.2 }}
       className={`${
         isMobile 
-          ? 'mt-2 pl-6 w-full' 
+          ? 'mt-2 pl-4 w-full' 
           : 'absolute top-full left-0 mt-2 w-full min-w-[280px] z-50'
       }`}
     >
@@ -186,8 +182,6 @@ const Dropdown: React.FC<DropdownProps> = ({ items, onClose, isMobile = false })
   );
 };
 
-
-
 // ========== MAIN NAVBAR COMPONENT ==========
 const Navbar: React.FC = () => {
   // State management
@@ -199,9 +193,10 @@ const Navbar: React.FC = () => {
   // Refs
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
-  // Close dropdowns on outside click
+  // Close dropdowns on outside click (desktop only)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       try {
@@ -216,6 +211,26 @@ const Navbar: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileMenuRef.current && 
+          !mobileMenuRef.current.contains(event.target as Node) &&
+          !(event.target as Element).closest('button[aria-controls="mobile-menu"]')) {
+        setIsMenuOpen(false);
+        setActiveDropdown(null);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   // Scroll effect with error handling
   useEffect(() => {
@@ -256,8 +271,13 @@ const Navbar: React.FC = () => {
   // Toggle functions with error handling
   const toggleMenu = useCallback(() => {
     try {
-      setIsMenuOpen(prev => !prev);
-      setActiveDropdown(null);
+      setIsMenuOpen(prev => {
+        const newState = !prev;
+        if (!newState) {
+          setActiveDropdown(null);
+        }
+        return newState;
+      });
     } catch (error) {
       console.error('Error toggling menu:', error);
       setIsMenuOpen(false);
@@ -273,6 +293,23 @@ const Navbar: React.FC = () => {
     }
   }, []);
 
+  // Mobile specific dropdown toggle - SIMPLIFIED VERSION
+  const toggleMobileDropdown = useCallback((itemName: string) => {
+    try {
+      setActiveDropdown(prev => {
+        // Toggle the dropdown: if it's already open, close it; if closed, open it
+        return prev === itemName ? null : itemName;
+      });
+    } catch (error) {
+      console.error('Error toggling mobile dropdown:', error);
+      setActiveDropdown(null);
+    }
+  }, []);
+
+  // Close mobile dropdown function
+  const closeMobileDropdown = useCallback(() => {
+    setActiveDropdown(null);
+  }, []);
 
   // Mobile menu variants for Framer Motion
   const mobileMenuVariants = {
@@ -442,32 +479,47 @@ const Navbar: React.FC = () => {
                   </motion.span>
                 </NavLink>
               </motion.div>
-
             </div>
 
-            {/* Mobile Menu Button */}
-            <motion.button
+            {/* Mobile Menu Button - FIXED: No overlapping icons */}
+            <button
               type="button"
               className="lg:hidden inline-flex items-center justify-center p-2.5 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50/30 transition-colors focus:outline-none"
               aria-label={isMenuOpen ? 'Close main menu' : 'Open main menu'}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
               onClick={toggleMenu}
-              whileTap={{ scale: 0.95 }}
             >
-              <motion.div
-                animate={isMenuOpen ? 'open' : 'closed'}
-                className="relative w-5 h-5"
-              >
-                <Menu className="absolute inset-0" />
-                <X className="absolute inset-0" />
-              </motion.div>
-            </motion.button>
+              <AnimatePresence mode="wait">
+                {isMenuOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-5 h-5" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-5 h-5" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
           </div>
 
           {/* Mobile Navigation Menu */}
           <motion.div
             id="mobile-menu"
+            ref={mobileMenuRef}
             className="lg:hidden overflow-hidden"
             variants={mobileMenuVariants}
             initial="closed"
@@ -480,7 +532,7 @@ const Navbar: React.FC = () => {
                   {item.hasDropdown ? (
                     <>
                       <button
-                        onClick={() => toggleDropdown(item.name)}
+                        onClick={() => toggleMobileDropdown(item.name)}
                         className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50/30 transition-colors"
                         aria-expanded={activeDropdown === item.name}
                       >
@@ -492,13 +544,20 @@ const Navbar: React.FC = () => {
                           <ChevronDown className="w-5 h-5" />
                         </motion.div>
                       </button>
+                      
+                      {/* Mobile Dropdown */}
                       <AnimatePresence>
                         {activeDropdown === item.name && item.dropdown && (
-                          <Dropdown
-                            items={item.dropdown}
-                            onClose={() => setActiveDropdown(null)}
-                            isMobile={true}
-                          />
+                          <div className="overflow-hidden">
+                            <Dropdown
+                              items={item.dropdown}
+                              onClose={() => {
+                                setActiveDropdown(null);
+                                // Don't close the entire menu, just the dropdown
+                              }}
+                              isMobile={true}
+                            />
+                          </div>
                         )}
                       </AnimatePresence>
                     </>
@@ -512,7 +571,10 @@ const Navbar: React.FC = () => {
                           : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50/30'
                         }
                       `}
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setActiveDropdown(null);
+                      }}
                     >
                       {item.name}
                     </NavLink>
@@ -523,11 +585,13 @@ const Navbar: React.FC = () => {
               {/* Mobile CTA Buttons */}
               <div className="pt-4 border-t border-gray-200/30 mt-4">
                 <div className="grid grid-cols-2 gap-3 px-4">
-
                   <NavLink
                     to="/donate"
                     className="flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-md transition-all"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setActiveDropdown(null);
+                    }}
                   >
                     <Heart className="w-4 h-4" />
                     <span className="text-sm font-medium">Donate</span>

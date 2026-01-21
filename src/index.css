@@ -24,7 +24,33 @@
     --color-error: 220 38 38;       /* Soft Red */
   }
 }
+/* Add these responsive improvements */
+@media (max-width: 1024px) {
+  /* Ensure dropdowns are properly visible on mobile */
+  [id="mobile-menu"] {
+    max-height: calc(100vh - 120px) !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Improve touch targets on mobile */
+  .lg\\:hidden a, 
+  .lg\\:hidden button {
+    min-height: 44px; /* Minimum touch target size */
+  }
+}
 
+/* Prevent horizontal scrolling on mobile */
+body {
+  overflow-x: hidden;
+}
+
+/* Improve dropdown positioning on larger screens */
+@media (min-width: 1024px) {
+  .relative > .absolute {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+}
 @layer utilities {
   .bg-primary {
     background-color: rgb(var(--color-primary));

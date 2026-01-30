@@ -5,14 +5,8 @@
  * Open-source software provided by Spurvance Labs.
  * See LICENSE file for details.
  */
-import { 
-  Cpu, 
-  Shield, 
-  Lock, 
-  Code, 
-  Globe, 
-  Sparkles,
-} from 'lucide-react';
+import { Cpu, Shield, Lock, Code, Globe, ArrowRight } from 'lucide-react';
+import {Link} from "react-router-dom";
 const Impact = () => {
   return (
     <>
@@ -20,12 +14,6 @@ const Impact = () => {
       <section className="py-24 px-4 bg-gradient-to-b from-white to-blue-50/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 mb-6">
-              <Sparkles className="w-5 h-5 text-blue-600 mr-2" />
-              <span className="text-sm font-semibold text-blue-700 uppercase tracking-wide">
-                Building Digital Sovereignty
-              </span>
-            </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Building Pakistan's <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Digital Backbone</span>
             </h2>
@@ -46,18 +34,14 @@ const Impact = () => {
                 Sovereign Communications
               </h3>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                Pakistan's first end-to-end encrypted messaging platform built on open-source principles. No backdoors, no surveillance, just private conversations protected by Pakistani security standards.
+                National Authentified Telegrams (NAT): Pakistan's first end-to-end encrypted messaging platform built on open-source principles. No backdoors, no surveillance, just private conversations protected by Pakistani security standards.
               </p>
-              {/* <div className="flex items-center text-blue-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
-                <span>Learn about N-Chat</span>
+                <Link to="/products/nat">
+              <div className="cursor-pointer flex items-center text-blue-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                <span>Learn about NAT</span>
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </div> */}
-              <div className="mt-6 pt-6 border-t border-gray-100">
-                <div className="flex items-center text-sm text-gray-500">
-                  <Shield className="w-4 h-4 mr-2" />
-                  <span>Military-grade encryption</span>
-                </div>
               </div>
+                </Link>
             </div>
 
             {/* Digital Infrastructure */}

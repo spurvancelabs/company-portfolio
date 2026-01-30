@@ -29,7 +29,7 @@ const Logo = ({
   const logoContent = (
     <div className="flex items-center space-x-3 group">
       <img
-        src="/logo.png"
+        src="/assets/logo.png"
         alt="Spurvance Labs Logo"
         className={`${sizes[size]} object-contain transition-transform duration-300 group-hover:scale-105`}
       />

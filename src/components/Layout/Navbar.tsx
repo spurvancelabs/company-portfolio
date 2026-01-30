@@ -36,47 +36,30 @@ const productsDropdown: DropdownItem[] = [
     path: '/products/ai-platform',
     badge: 'New',
   },
-  {
-    name: 'Cloud Infrastructure',
-    description: 'Scalable cloud solutions',
-    path: '/products/cloud',
-    badge: 'Popular',
-  },
-  {
-    name: 'Dev Tools',
-    description: 'Developer productivity suite',
-    path: '/products/dev-tools',
-  },
-  {
-    name: 'Enterprise Suite',
-    description: 'Complete enterprise solution',
-    path: '/products/enterprise',
-    badge: 'Enterprise',
-  }
 ];
 
-const resourcesDropdown: DropdownItem[] = [
-  {
-    name: 'Documentation',
-    description: 'Complete API references',
-    path: '/docs'
-  },
-  {
-    name: 'Tutorials',
-    description: 'Step-by-step guides',
-    path: '/tutorials'
-  },
-  {
-    name: 'Blog',
-    description: 'Latest updates & insights',
-    path: '/blog'
-  },
-  {
-    name: 'Community Forum',
-    description: 'Connect with developers',
-    path: '/forum'
-  }
-];
+// const resourcesDropdown: DropdownItem[] = [
+//   {
+//     name: 'Documentation',
+//     description: 'Complete API references',
+//     path: '/docs'
+//   },
+//   {
+//     name: 'Tutorials',
+//     description: 'Step-by-step guides',
+//     path: '/tutorials'
+//   },
+//   {
+//     name: 'Blog',
+//     description: 'Latest updates & insights',
+//     path: '/blog'
+//   },
+//   {
+//     name: 'Community Forum',
+//     description: 'Connect with developers',
+//     path: '/forum'
+//   }
+// ];
 
 const navItems: NavItem[] = [
   {
@@ -85,28 +68,34 @@ const navItems: NavItem[] = [
     label: 'Navigate to Spurvance Labs homepage'
   },
   {
+    name: 'About',
+    path: '/about',
+    label: 'About Spurvance Labs'
+  },
+  {
     name: 'Products',
     path: '#',
     label: 'Explore our products',
     hasDropdown: true,
     dropdown: productsDropdown
   },
+
+  // {
+  //   name: 'Resources',
+  //   path: '#',
+  //   label: 'Access resources',
+  //   hasDropdown: true,
+  //   dropdown: resourcesDropdown
+  // },
   {
-    name: 'Solutions',
-    path: '/solutions',
-    label: 'Discover solutions'
+    name: 'Contribute',
+    path: '/contribute',
+    label: 'Contribute to our Open Source Products'
   },
   {
-    name: 'Resources',
-    path: '#',
-    label: 'Access resources',
-    hasDropdown: true,
-    dropdown: resourcesDropdown
-  },
-  {
-    name: 'Pricing',
-    path: '/pricing',
-    label: 'View pricing plans'
+    name: 'Community',
+    path: '/community',
+    label: 'Join our Community'
   },
   {
     name: 'Contact',
@@ -136,8 +125,8 @@ const Dropdown: React.FC<DropdownProps> = ({ items, onClose, isMobile = false })
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
       className={`${
-        isMobile 
-          ? 'mt-2 pl-4 w-full' 
+        isMobile
+          ? 'mt-2 pl-4 w-full'
           : 'absolute top-full left-0 mt-2 w-full min-w-[280px] z-50'
       }`}
     >
@@ -160,10 +149,10 @@ const Dropdown: React.FC<DropdownProps> = ({ items, onClose, isMobile = false })
                     </span>
                     {item.badge && (
                       <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-                        item.badge === 'New' 
-                          ? 'bg-green-100 text-green-800' 
-                          : item.badge === 'Popular' 
-                          ? 'bg-orange-100 text-orange-800' 
+                        item.badge === 'New'
+                          ? 'bg-green-100 text-green-800'
+                          : item.badge === 'Popular'
+                          ? 'bg-orange-100 text-orange-800'
                           : 'bg-blue-100 text-blue-800'
                       }`}>
                         {item.badge}
@@ -215,7 +204,7 @@ const Navbar: React.FC = () => {
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (mobileMenuRef.current && 
+      if (mobileMenuRef.current &&
           !mobileMenuRef.current.contains(event.target as Node) &&
           !(event.target as Element).closest('button[aria-controls="mobile-menu"]')) {
         setIsMenuOpen(false);
@@ -226,7 +215,7 @@ const Navbar: React.FC = () => {
     if (isMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -313,20 +302,20 @@ const Navbar: React.FC = () => {
 
   // Mobile menu variants for Framer Motion
   const mobileMenuVariants = {
-    open: { 
-      opacity: 1, 
+    open: {
+      opacity: 1,
       height: 'auto',
-      transition: { 
+      transition: {
         duration: 0.3,
-        ease: "easeInOut" 
+        ease: "easeInOut"
       }
     },
-    closed: { 
-      opacity: 0, 
+    closed: {
+      opacity: 0,
       height: 0,
-      transition: { 
+      transition: {
         duration: 0.3,
-        ease: "easeInOut" 
+        ease: "easeInOut"
       }
     }
   };
@@ -354,7 +343,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       <TopBar />
-      
+
       <motion.nav
         ref={navRef}
         role="navigation"
@@ -368,33 +357,35 @@ const Navbar: React.FC = () => {
           margin: '0 auto',
           maxWidth: 'calc(100% - 2rem)',
           borderRadius: scrolled ? '1rem' : '0.75rem',
-          marginTop: scrolled ? '0.5rem' : '1rem'
+          marginTop: scrolled ? '0.5rem' : '1rem',
         }}
         animate={scrolled ? 'scrolled' : 'normal'}
         variants={navbarHeightVariants}
         transition={{ duration: 0.3 }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Desktop Layout: Logo Left | Links Center | CTA Right */}
+          {/* Desktop Layout */}
           <div className="flex items-center justify-between h-16">
-            {/* Left: Logo with proper spacing */}
-            <motion.div 
+            {/* Logo*/}
+            <motion.div
               className="flex items-center"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
               <Logo size="lg" showTagline />
-              <motion.span 
+              <motion.span
                 className="hidden lg:block ml-3"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
-              >
-              </motion.span>
+              ></motion.span>
             </motion.div>
 
-            {/* Center: Navigation Links (hidden on mobile) */}
-            <div className="hidden lg:flex items-center justify-center flex-1 px-8" ref={dropdownRef}>
+            {/* Navigation Links (hidden on mobile) */}
+            <div
+              className="hidden lg:flex items-center justify-center flex-1 px-8"
+              ref={dropdownRef}
+            >
               <div className="flex items-center space-x-1">
                 {navItems.map((item) => (
                   <div key={item.name} className="relative">
@@ -412,7 +403,9 @@ const Navbar: React.FC = () => {
                       >
                         <span>{item.name}</span>
                         <motion.div
-                          animate={{ rotate: activeDropdown === item.name ? 180 : 0 }}
+                          animate={{
+                            rotate: activeDropdown === item.name ? 180 : 0,
+                          }}
                           transition={{ duration: 0.2 }}
                         >
                           <ChevronDown className="w-4 h-4" />
@@ -424,9 +417,10 @@ const Navbar: React.FC = () => {
                         aria-label={item.label}
                         className={({ isActive }) => `
                           relative px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
-                          ${isActive
-                            ? 'text-blue-600 bg-blue-50/50'
-                            : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50/30'
+                          ${
+                            isActive
+                              ? 'text-blue-600 bg-blue-50/50'
+                              : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50/30'
                           }
                         `}
                         end
@@ -436,7 +430,8 @@ const Navbar: React.FC = () => {
                             <span>{item.name}</span>
                             {isActive && (
                               <motion.div
-                                className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full w-1/2"
+                                className="absolute bottom-0 rounded-full w-1/2"
+                                // className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full w-1/2"
                                 layoutId="activeIndicator"
                                 transition={{ duration: 0.3 }}
                               />
@@ -448,34 +443,42 @@ const Navbar: React.FC = () => {
 
                     {/* Dropdown */}
                     <AnimatePresence>
-                      {item.hasDropdown && activeDropdown === item.name && item.dropdown && (
-                        <Dropdown
-                          items={item.dropdown}
-                          onClose={() => setActiveDropdown(null)}
-                        />
-                      )}
+                      {item.hasDropdown &&
+                        activeDropdown === item.name &&
+                        item.dropdown && (
+                          <Dropdown
+                            items={item.dropdown}
+                            onClose={() => setActiveDropdown(null)}
+                          />
+                        )}
                     </AnimatePresence>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right: CTA Buttons & User Menu */}
+            {/*CTA Buttons */}
             <div className="hidden lg:flex items-center space-x-4">
               {/* Action Buttons */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <NavLink
                   to="/donate"
-                  className="group flex items-center space-x-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg transition-all duration-200"
+                  className="group flex items-center space-x-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-blue-600  hover:shadow-lg transition-all duration-200"
                   aria-label="Donate to Spurvance Labs"
                 >
                   <Heart className="w-4 h-4" />
                   <span>Donate</span>
                   <motion.span
                     animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 3,
+                    }}
                   >
-                    <Sparkles className="w-4 h-4" />
                   </motion.span>
                 </NavLink>
               </motion.div>
@@ -538,13 +541,15 @@ const Navbar: React.FC = () => {
                       >
                         <span>{item.name}</span>
                         <motion.div
-                          animate={{ rotate: activeDropdown === item.name ? 180 : 0 }}
+                          animate={{
+                            rotate: activeDropdown === item.name ? 180 : 0,
+                          }}
                           transition={{ duration: 0.2 }}
                         >
                           <ChevronDown className="w-5 h-5" />
                         </motion.div>
                       </button>
-                      
+
                       {/* Mobile Dropdown */}
                       <AnimatePresence>
                         {activeDropdown === item.name && item.dropdown && (
@@ -566,9 +571,10 @@ const Navbar: React.FC = () => {
                       to={item.path}
                       className={({ isActive }) => `
                         block px-4 py-3.5 rounded-xl text-base font-medium transition-all duration-200
-                        ${isActive
-                          ? 'text-blue-600 bg-blue-50/50'
-                          : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50/30'
+                        ${
+                          isActive
+                            ? 'text-blue-600 bg-blue-50/50'
+                            : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50/30'
                         }
                       `}
                       onClick={() => {

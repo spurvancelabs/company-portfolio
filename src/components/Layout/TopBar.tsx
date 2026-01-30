@@ -6,7 +6,7 @@ const TopBar = () => {
         <div className="container mx-auto px-4 text-center">
           <span className="inline-flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
-            <span>🎉 New AI Platform Launched! <a href="/products/ai-platform" className="underline font-semibold ml-1">Explore Now →</a></span>
+            <span>Pakistan's First Open Source Chat App "NAT" Launched! <a href="/products/nat" className="underline font-semibold ml-1">Explore Now →</a></span>
           </span>
         </div>
       </div>

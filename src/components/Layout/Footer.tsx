@@ -25,21 +25,13 @@ const Footer = () => {
     <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white">
       <div className="max-w-7xl mx-auto px-4 py-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-
           {/* Brand */}
           <div>
             <Logo size="lg" />
             <p className="text-gray-400 mt-4 max-w-sm">
-              Spurvance Labs builds secure, scalable software and
-              open-source technology focused on cybersecurity,
-              automation, and engineering.
+              Spurvance Labs builds secure, scalable software and open-source
+              technology focused on cybersecurity, automation, and engineering.
             </p>
-
-            <div className="flex gap-3 mt-4">
-              <span className="px-3 py-1 text-xs bg-blue-900/30 border border-blue-800 rounded">
-                🇵🇰 Pakistan
-              </span>
-            </div>
           </div>
 
           {/* Links */}
@@ -49,11 +41,31 @@ const Footer = () => {
               Company
             </h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><Link to="/about" className="hover:text-white">About</Link></li>
-              <li><Link to="/community" className="hover:text-white">Community</Link></li>
-              <li><Link to="/licensing" className="hover:text-white">Licensing</Link></li>
-              <li><Link to="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="hover:text-white">Terms of Service</Link></li>
+              <li>
+                <Link to="/about" className="hover:text-white">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link to="/community" className="hover:text-white">
+                  Community
+                </Link>
+              </li>
+              <li>
+                <Link to="/licensing" className="hover:text-white">
+                  Licensing
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="hover:text-white">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="hover:text-white">
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -71,7 +83,15 @@ const Footer = () => {
               >
                 info@spurvancelabs.com
               </a>
-
+              <a
+                href="https://wa.me/+923294171505"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                className="text-gray-400 hover:text-white block"
+              >
+                +92 3294171505
+              </a>
               <div className="flex gap-4 mt-4 flex-wrap">
                 <a
                   href="https://github.com/spurvancelabs"
@@ -129,12 +149,8 @@ const Footer = () => {
 
         {/* Bottom */}
         <div className="mt-12 pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-4">
-          <div>
-            © {currentYear} Spurvance Labs. All rights reserved.
-          </div>
-          <div>
-            Building secure & open technology.
-          </div>
+          <div>© {currentYear} Spurvance Labs. All rights reserved.</div>
+          <div>Building secure & open technology.</div>
         </div>
       </div>
     </footer>

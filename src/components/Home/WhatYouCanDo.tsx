@@ -53,19 +53,14 @@ const WhatYouCanDo = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header with Brand Promise */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 mb-6">
-            <Sparkles className="w-5 h-5 text-blue-600 mr-3" />
-            <span className="text-sm font-semibold text-blue-700 uppercase tracking-wider">
-              Join The Movement
-            </span>
-          </div>
-          
+
+
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Pakistan's Digital Future</span>
           </h2>
-          
+
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Whether you're a developer, designer, student, or visionary—your skills can help create 
+            Whether you're a developer, designer, student, or visionary—your skills can help create
             technology that serves <span className="font-semibold text-blue-700">Pakistan first</span>.
           </p>
         </div>
@@ -73,13 +68,13 @@ const WhatYouCanDo = () => {
         {/* Opportunities Grid */}
         <div className="grid lg:grid-cols-3 gap-8 mb-16">
           {opportunities.map((opp, index) => (
-            <div 
+            <div
               key={index}
               className="group relative overflow-hidden bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border-2 border-gray-100 hover:border-blue-200"
             >
               {/* Gradient Header */}
               <div className={`relative h-2 bg-gradient-to-r ${opp.gradient}`} />
-              
+
               <div className="p-8">
                 {/* Icon & Title */}
                 <div className="flex items-center mb-6">
@@ -103,7 +98,7 @@ const WhatYouCanDo = () => {
                   <div className="text-sm font-medium text-gray-500 mb-3">Perfect for:</div>
                   <div className="flex flex-wrap gap-2">
                     {opp.roleExamples.map((role, idx) => (
-                      <span 
+                      <span
                         key={idx}
                         className="px-3 py-1.5 bg-gray-50 text-gray-700 text-xs font-medium rounded-full border border-gray-200"
                       >
@@ -184,7 +179,7 @@ const WhatYouCanDo = () => {
           <h3 className="text-3xl font-bold text-gray-900 mb-6">
             Ready to Start? Here's Your Path
           </h3>
-          
+
           <div className="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
               { step: "1", title: "Join Discord", desc: "Introduce yourself", color: "bg-blue-500" },

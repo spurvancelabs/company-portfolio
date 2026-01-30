@@ -5,7 +5,7 @@
  * Open-source software provided by Spurvance Labs.
  * See LICENSE file for details.
  */
-import { Code, Users, Heart, ArrowRight, Zap, Star, Users2 } from 'lucide-react';
+import { Code, Users, ArrowRight, Zap, Star, Users2 } from 'lucide-react';
 import {Link} from "react-router-dom"
 const WhatYouCanDo = () => {
   const opportunities = [

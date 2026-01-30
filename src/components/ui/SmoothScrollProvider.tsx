@@ -16,12 +16,11 @@ export function SmoothScrollProvider({
 
     if (prefersReducedMotion) return;
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => 1 - Math.pow(1 - t, 3), // easeOutCubic
-      smoothWheel: true,
-      smoothTouch: false,
-    });
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t: number) => 1 - Math.pow(1 - t, 3),
+        });
+
 
     const raf = (time: number) => {
       lenis.raf(time);

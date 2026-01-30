@@ -7,8 +7,9 @@
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Heart, Menu, X, ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
+import { Heart, Menu, X, ArrowRight, ChevronDown} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { Variants } from "framer-motion";
 import Logo from "../Logo";
 import TopBar from './TopBar';
 
@@ -177,7 +178,7 @@ const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [hasError, setHasError] = useState<boolean>(false);
+  const [hasError] = useState<boolean>(false);
 
   // Refs
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -296,28 +297,30 @@ const Navbar: React.FC = () => {
   }, []);
 
   // Close mobile dropdown function
-  const closeMobileDropdown = useCallback(() => {
-    setActiveDropdown(null);
-  }, []);
+//  const closeMobileDropdown = useCallback(() => {
+  //  setActiveDropdown(null);
+  //}, []);
 
   // Mobile menu variants for Framer Motion
-  const mobileMenuVariants = {
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+  const mobileMenuVariants: Variants = {
     open: {
       opacity: 1,
-      height: 'auto',
+      height: "auto",
       transition: {
         duration: 0.3,
-        ease: "easeInOut"
-      }
+        ease: easeOutCubic,
+      },
     },
     closed: {
       opacity: 0,
       height: 0,
       transition: {
         duration: 0.3,
-        ease: "easeInOut"
-      }
-    }
+        ease: easeOutCubic,
+      },
+    },
   };
 
   // Navbar height variants for smooth animation

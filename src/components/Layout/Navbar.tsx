@@ -32,10 +32,10 @@ interface NavItem {
 // ========== CONSTANTS ==========
 const productsDropdown: DropdownItem[] = [
   {
-    name: 'AI Platform',
-    description: 'Advanced AI development suite',
-    path: '/products/ai-platform',
-    badge: 'New',
+    name: 'NAT',
+    description: 'A Secure Open Source encrypted chat app',
+    path: '/products/nat',
+    badge: 'V1',
   },
 ];
 
@@ -396,7 +396,7 @@ const Navbar: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => toggleDropdown(item.name)}
-                        className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                        className={`flex cursor-pointer items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                           activeDropdown === item.name
                             ? 'text-blue-600 bg-blue-50/50'
                             : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50/30'

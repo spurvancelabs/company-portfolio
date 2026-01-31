@@ -22,6 +22,8 @@ import Contribute from "./pages/Contribute";
 import Community from "./pages/Community";
 import Contact from "./pages/Contact";
 import Donate from "./pages/Donate";
+// Pages/Products
+import Nat from "./pages/Products/Nat"
 // TODO: WORK ON THESE FILES
 import Licensing from "./pages/Licensing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -53,6 +55,8 @@ export default function App() {
             <Route path="/cla" element={<Cla />} />
             <Route path="/conduct" element={<CodeOfConduct />} />
             <Route path="/certificate" element={<Certificate />} />
+            <Route path="/products/nat" element={<Nat />} />
+
           </Routes>
         </main>
 

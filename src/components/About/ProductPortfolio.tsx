@@ -9,10 +9,10 @@ import {
   Shield, 
   Code, 
   Users, 
-  MessageSquare,
   Layers,
   GitBranch,
 } from "lucide-react";
+import {Link} from "react-router-dom"
 const ProductPortfolio = () => {
   return (
           <section className="py-24 px-4 bg-white">
@@ -30,10 +30,11 @@ const ProductPortfolio = () => {
             <div className="p-10 bg-gradient-to-br from-blue-50 to-white rounded-3xl border-2 border-blue-100">
               <div className="flex items-center mb-6">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center mr-5">
-                  <MessageSquare className="w-7 h-7 text-white" />
+                  {/*<MessageSquare className="w-7 h-7 text-white" />*/}
+                  <img src="/assets/nat.png" alt='nat logo' />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900">N-Chat</h3>
+                  <h3 className="text-2xl font-bold text-gray-900">NAT</h3>
                   <p className="text-blue-600 font-medium">Secure Messaging Platform</p>
                 </div>
               </div>
@@ -42,7 +43,7 @@ const ProductPortfolio = () => {
               </p>
               <div className="flex items-center text-blue-600 font-semibold">
                 <GitBranch className="w-4 h-4 mr-2" />
-                <span>Active Development - Join Beta</span>
+                <span><Link to="/products/nat">Active Development - Join Beta</Link></span>
               </div>
             </div>
 
@@ -52,8 +53,8 @@ const ProductPortfolio = () => {
                   <Layers className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900">Spurvance OS</h3>
-                  <p className="text-cyan-600 font-medium">Privacy-Focused Operating System</p>
+                  <h3 className="text-2xl font-bold text-gray-900">AI Agent</h3>
+                  <p className="text-cyan-600 font-medium">Privacy-Focused Personal AI System</p>
                 </div>
               </div>
               <p className="text-gray-600 mb-8">
@@ -61,7 +62,7 @@ const ProductPortfolio = () => {
               </p>
               <div className="flex items-center text-cyan-600 font-semibold">
                 <Code className="w-4 h-4 mr-2" />
-                <span>Coming 2025 - Alpha Testing</span>
+                <span>Coming 2027 - Under Development</span>
               </div>
             </div>
           </div>

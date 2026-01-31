@@ -71,7 +71,7 @@ const ProblemSolution = () => {
                   <div>
                     <h4 className="font-bold text-gray-900 mb-2">Legal Sovereignty</h4>
                     <p className="text-gray-600 text-sm">
-                      Registered in Pakistan, compliant with PTA regulations, and built for Pakistani data protection laws
+                      Military Grade encryoted data with code open source developers contributing
                     </p>
                   </div>
                 </div>

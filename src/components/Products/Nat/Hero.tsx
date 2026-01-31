@@ -6,8 +6,8 @@
  * Open-source software provided by Spurvance Labs.
  * See LICENSE file for details.
  */
-import Logo from "../../components/Logo";
 
+import Logo from "../../../components/Logo";
 const Hero = () => {
   return (
       <section className="pt-28 pb-24 px-4 bg-gradient-to-b from-white to-blue-50/30">

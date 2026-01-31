@@ -23,13 +23,13 @@ const TermsGovernance = () => {
             {[
               {
                 role: "Founder & CEO/CTO",
-                name: "Abdullah Khaver",
+                name: "Muhammad Abdullah",
                 bio: "Specializes in encryption protocols and secure system design. Previously worked on government security projects.",
                 focus: "Security Architecture"
               },
               {
                 role: "Co-founder & COO/CLO",
-                name: "Hamza Ajmal",
+                name: "Muhammad Hamza",
                 bio: "Leads UX research and product planning. Focuses on making complex security technology accessible and managing legal things.",
                 focus: "User Experience"
               },

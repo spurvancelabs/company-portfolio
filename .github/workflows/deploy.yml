@@ -20,18 +20,17 @@ jobs:
         with:
           version: 10
 
-      # 3️⃣ Setup Node AFTER pnpm
+      # 3️⃣ Setup Node AFTER pnpm (Updated to Node.js 20)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: 'pnpm'
           
-      # 4️⃣ Debug - list files
+      # 4️⃣ Debug - list files (optional, can remove after working)
       - name: List files to debug
         run: |
           ls -la
-          ls -la .gitignore
           find . -name "pnpm-lock.yaml" -type f
 
       # 5️⃣ Install deps

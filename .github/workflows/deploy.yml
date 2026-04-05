@@ -20,32 +20,22 @@ jobs:
         with:
           version: 10
 
-      # 3️⃣ Setup Node AFTER pnpm (Updated to Node.js 20)
+      # 3️⃣ Setup Node AFTER pnpm
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-          
-      # 4️⃣ Debug - list files (optional, can remove after working)
-      - name: List files to debug
-        run: |
-          ls -la
-          find . -name "pnpm-lock.yaml" -type f
 
-      # 5️⃣ Install deps
+      # 4️⃣ Install deps
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 6️⃣ Build Next.js
+      # 5️⃣ Build Next.js (this now generates the 'out' folder automatically with output: 'export')
       - name: Build Next.js app
         run: pnpm build
 
-      # 7️⃣ Export static
-      - name: Export static files
-        run: pnpm next export
-
-      # 8️⃣ Deploy
+      # 6️⃣ Deploy (removed the next export step)
       - name: Deploy via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:

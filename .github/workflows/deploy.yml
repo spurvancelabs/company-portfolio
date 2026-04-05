@@ -10,36 +10,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
+      # 1️⃣ Checkout
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js
+      # 2️⃣ Setup pnpm FIRST
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      # 3️⃣ Setup Node AFTER pnpm
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'pnpm'
 
-      # 3️⃣ Setup pnpm
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-
-      # 4️⃣ Install dependencies
+      # 4️⃣ Install deps
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5️⃣ Build Next.js app
+      # 5️⃣ Build Next.js
       - name: Build Next.js app
         run: pnpm build
 
-      # 6️⃣ Export static site (IMPORTANT for FTP hosting)
+      # 6️⃣ Export static
       - name: Export static files
         run: pnpm next export
 
-      # 7️⃣ Deploy via FTPS
+      # 7️⃣ Deploy
       - name: Deploy via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:

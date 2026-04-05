@@ -28,19 +28,35 @@ const WaitlistPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Here you would integrate with your email service (ConvertKit, Mailchimp, etc.)
-    console.log('Email submitted:', email);
-    
+
+const WAITLIST_API_URL = 'https://spurvancelabs.com/api/waitlist.php';
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsLoading(true);
+
+  try {
+    const res = await fetch(WAITLIST_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      // Show the server's error message (duplicate email, invalid, etc.)
+      alert(data.message ?? 'Something went wrong. Please try again.');
+      return;
+    }
+
     setSubmitted(true);
+  } catch (err) {
+    alert('Network error. Please check your connection and try again.');
+  } finally {
     setIsLoading(false);
-  };
+  }
+};
 
   const benefits = [
     { icon: Shield, text: 'Early access to NAT Chat preview' },

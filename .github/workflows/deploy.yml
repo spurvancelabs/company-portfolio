@@ -26,7 +26,12 @@ jobs:
         with:
           node-version: 18
           cache: 'pnpm'
-
+          
+	- name: List files to debug
+  	  run: ls -la
+    		ls -la .gitignore
+    		find . -name "pnpm-lock.yaml" -type f
+    
       # 4️⃣ Install deps
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

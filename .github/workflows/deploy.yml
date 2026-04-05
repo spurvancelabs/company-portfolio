@@ -18,7 +18,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 10
 
       # 3️⃣ Setup Node AFTER pnpm
       - name: Setup Node.js
@@ -27,24 +27,26 @@ jobs:
           node-version: 18
           cache: 'pnpm'
           
-	- name: List files to debug
-  	  run: ls -la
-    		ls -la .gitignore
-    		find . -name "pnpm-lock.yaml" -type f
-    
-      # 4️⃣ Install deps
+      # 4️⃣ Debug - list files
+      - name: List files to debug
+        run: |
+          ls -la
+          ls -la .gitignore
+          find . -name "pnpm-lock.yaml" -type f
+
+      # 5️⃣ Install deps
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5️⃣ Build Next.js
+      # 6️⃣ Build Next.js
       - name: Build Next.js app
         run: pnpm build
 
-      # 6️⃣ Export static
+      # 7️⃣ Export static
       - name: Export static files
         run: pnpm next export
 
-      # 7️⃣ Deploy
+      # 8️⃣ Deploy
       - name: Deploy via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:

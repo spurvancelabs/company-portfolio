@@ -44,7 +44,7 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
-      - name: 🔧 Prepare .htaccess for SPA routing
+      - name: 🔧 Prepare .htaccess for clean URLs
         run: |
           cat > apps/web/out/.htaccess << 'EOF'
           RewriteEngine On
@@ -68,9 +68,10 @@ jobs:
               Header set X-XSS-Protection "1; mode=block"
           </IfModule>
           
-          # Cache Control for Static Assets
+          # Cache Control
           <IfModule mod_expires.c>
               ExpiresActive On
+              ExpiresByType image/webp "access plus 1 year"
               ExpiresByType image/jpg "access plus 1 year"
               ExpiresByType image/jpeg "access plus 1 year"
               ExpiresByType image/gif "access plus 1 year"
@@ -82,12 +83,6 @@ jobs:
           
           # Prevent directory listing
           Options -Indexes
-          
-          # Block access to hidden files
-          <FilesMatch "^\.">
-              Order allow,deny
-              Deny from all
-          </FilesMatch>
           EOF
 
       - name: 📤 Deploy to cPanel via FTP
@@ -99,7 +94,7 @@ jobs:
           port: 21
           protocol: ftps
           local-dir: ./apps/web/out/
-          server-dir: /spurvancelabs.com/web/           # ← CORRECTED PATH
+          server-dir: /spurvancelabs.com/web/
           dangerous-clean-slate: true
           exclude: |
             **/.git*

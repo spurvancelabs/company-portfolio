@@ -1,26 +1,23 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // IMPORTANT: Use 'export' for static HTML output (works on shared hosting)
+  // Static export for shared hosting
   output: 'export',
   
-  // Disable image optimization (requires Node.js server)
+  // Disable image optimization (requires Node.js)
   images: {
     unoptimized: true,
   },
   
-  // Set base path if needed (empty for root domain)
-  basePath: '',
-  
-  // Disable trailing slash for cleaner URLs with .html
+  // No trailing slashes for cleaner URLs
   trailingSlash: false,
   
-  // Environment variables that will be available at build time
+  // Build-time environment variables
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://api.spurvancelabs.com',
   },
   
-  // Optional: Change output directory (default is 'out')
+  // Output directory (default is 'out')
   distDir: 'out',
 };
 

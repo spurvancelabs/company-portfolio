@@ -95,4 +95,4 @@ EOF
           dangerous-clean-slate: true
 
       - name: Done
-        run: echo "Deployed!"
+        run: echo "Deployed! wow"

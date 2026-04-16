@@ -22,29 +22,13 @@ jobs:
           node-version: '20'
 
       - name: Install pnpm
-        run: npm install -g pnpm@8.15.0
-
-      - name: Verify files
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Files in apps/web:"
-          ls -la apps/web/
-          echo "Looking for lock file:"
-          find . -name "*.yaml" -type f
+        run: npm install -g pnpm
 
       - name: Install dependencies
         working-directory: apps/web
-        run: |
-          if [ -f "pnpm-lock.yaml" ]; then
-            echo "Lock file found, using it"
-            pnpm install --frozen-lockfile
-          else
-            echo "No lock file, generating new one"
-            pnpm install
-          fi
+        run: pnpm install --no-frozen-lockfile
 
-      - name: Build static export
+      - name: Build
         working-directory: apps/web
         run: pnpm build
         env:
@@ -76,4 +60,4 @@ jobs:
           dangerous-clean-slate: true
 
       - name: Done
-        run: echo "✅ Deployed to https://spurvancelabs.com"
+        run: echo "✅ Deployed!"

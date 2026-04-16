@@ -7,11 +7,12 @@ on:
     paths:
       - 'apps/web/**'
       - '.github/workflows/deploy-web.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,7 +29,7 @@ jobs:
         working-directory: apps/web
         run: pnpm install --no-frozen-lockfile
 
-      - name: Build
+      - name: Build static export
         working-directory: apps/web
         run: pnpm build
         env:
@@ -36,51 +37,61 @@ jobs:
 
       - name: Create .htaccess
         run: |
-          echo "Build output structure:"
-          ls -la apps/web/out/
-
-          # Check if pages are HTML files
-          if [ -f "apps/web/out/about.html" ]; then
-            echo "Pages are HTML files"
-            cat > apps/web/out/.htaccess << 'EOF'
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} (.+)/$
-RewriteRule ^ %1 [R=301,L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^(.+?)/?$ $1.html [L]
-
-DirectoryIndex index.html
-Options -Indexes
-ErrorDocument 404 /404.html
-EOF
-          else
-            echo "Pages are folders with index.html"
-            cat > apps/web/out/.htaccess << 'EOF'
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^(.+)/?$ $1/index.html [L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-RewriteRule ^(.+?)/?$ $1.html [L]
-
-Options -Indexes
-ErrorDocument 404 /404.html
-EOF
-          fi
-
-          echo ".htaccess created based on build structure"
+          cat > apps/web/out/.htaccess << 'HTACCESS_EOF'
+          RewriteEngine On
+          
+          # Force HTTPS
+          RewriteCond %{HTTPS} off
+          RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+          
+          # Remove trailing slash for non-directories
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteCond %{REQUEST_URI} (.+)/$
+          RewriteRule ^ %1 [R=301,L]
+          
+          # First try to serve HTML file directly
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteCond %{REQUEST_FILENAME}.html -f
+          RewriteRule ^(.+?)/?$ $1.html [L]
+          
+          # If it's a directory with index.html, serve it
+          RewriteCond %{REQUEST_FILENAME} -d
+          RewriteCond %{REQUEST_FILENAME}/index.html -f
+          RewriteRule ^(.+?)/?$ $1/index.html [L]
+          
+          # Set default index
+          DirectoryIndex index.html
+          
+          # Prevent directory listing (fixes 403 error)
+          Options -Indexes
+          
+          # Custom 404 page
+          ErrorDocument 404 /404.html
+          
+          # Security Headers
+          <IfModule mod_headers.c>
+              Header set X-Content-Type-Options "nosniff"
+              Header set X-Frame-Options "SAMEORIGIN"
+              Header set X-XSS-Protection "1; mode=block"
+          </IfModule>
+          
+          # Cache Control
+          <IfModule mod_expires.c>
+              ExpiresActive On
+              ExpiresByType image/webp "access plus 1 year"
+              ExpiresByType image/jpg "access plus 1 year"
+              ExpiresByType image/jpeg "access plus 1 year"
+              ExpiresByType image/gif "access plus 1 year"
+              ExpiresByType image/png "access plus 1 year"
+              ExpiresByType image/svg+xml "access plus 1 year"
+              ExpiresByType text/css "access plus 1 month"
+              ExpiresByType application/javascript "access plus 1 month"
+              ExpiresByType text/html "access plus 1 hour"
+          </IfModule>
+          HTACCESS_EOF
+          
+          echo "✅ .htaccess created"
 
       - name: Deploy to cPanel
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -91,8 +102,8 @@ EOF
           port: 21
           protocol: ftps
           local-dir: ./apps/web/out/
-          server-dir: /web/
+          server-dir: /spurvancelabs.com/web/
           dangerous-clean-slate: true
 
       - name: Done
-        run: echo "Deployed! wow"
+        run: echo "✅ Deployed to https://spurvancelabs.com"

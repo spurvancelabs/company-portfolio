@@ -56,8 +56,8 @@ jobs:
           port: 21
           protocol: ftps
           local-dir: ./apps/web/out/
-          server-dir: /spurvancelabs.com/web/
+          server-dir: /web/
           dangerous-clean-slate: true
 
       - name: Done
-        run: echo "✅ Deployed!"
+        run: echo " Deployed!"

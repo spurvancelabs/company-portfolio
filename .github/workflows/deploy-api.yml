@@ -13,15 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 📥 Checkout code
+      - name:  Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔍 Validate PHP syntax
+      - name:  Validate PHP syntax
         run: |
           find apps/api -name "*.php" -not -path "*/\.*" -exec php -l {} \; 2>/dev/null || true
-          echo "✅ PHP syntax check completed"
+          echo " PHP syntax check completed"
 
-      - name: 📁 Prepare API files
+      - name:  Prepare API files
         run: |
           # Create clean deployment directory
           mkdir -p deploy_api
@@ -34,7 +34,7 @@ jobs:
           # Ensure public directory exists
           mkdir -p deploy_api/public
 
-      - name: 🔒 Create .htaccess for API
+      - name:  Create .htaccess for API
         run: |
           cat > deploy_api/.htaccess << 'EOF'
           RewriteEngine On
@@ -81,7 +81,7 @@ jobs:
           </IfModule>
           EOF
 
-      - name: 📤 Deploy to cPanel via FTP
+      - name:  Deploy to cPanel via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -90,7 +90,7 @@ jobs:
           port: 21
           protocol: ftps
           local-dir: ./deploy_api/
-          server-dir: /spurvancelabs.com/api/
+          server-dir: /api/
           dangerous-clean-slate: true
           exclude: |
             **/.git*
@@ -100,7 +100,7 @@ jobs:
             **/composer.json
             **/composer.lock
 
-      - name: ✅ Deployment Complete
+      - name:  Deployment Complete
         run: |
-          echo "✅ API backend deployed successfully!"
-          echo "🔗 API Endpoint: https://api.spurvancelabs.com"
+          echo " API backend deployed successfully!"
+          echo " API Endpoint: https://api.spurvancelabs.com"

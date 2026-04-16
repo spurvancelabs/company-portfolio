@@ -212,16 +212,26 @@ export default function DonatePage() {
   const [isAnnual, setIsAnnual] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleDonate = async () => {
-    setIsProcessing(true);
-    // Integrate with Stripe/PayPal here
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log('Donation initiated:', { amount: selectedTier, isAnnual });
+const handleDonate = async () => {
+  if (!selectedTier) return;
+
+  setIsProcessing(true);
+
+  const amount = isAnnual ? selectedTier * 12 * 0.9 : selectedTier;
+  const billing = isAnnual ? 'yearly' : 'monthly';
+
+
+  const phoneNumber = "923294171505"; 
+
+  const message = `Hello! I want to donate $${amount} (${billing}) to support your project`;
+
+  const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+  setTimeout(() => {
+    window.open(whatsappURL, "_blank");
     setIsProcessing(false);
-    
-    // Redirect to payment gateway
-    // window.location.href = '/api/checkout?amount=' + selectedTier;
-  };
+  }, 500);
+};
 
   const displayAmount = selectedTier ? (isAnnual ? selectedTier * 12 * 0.9 : selectedTier) : 0;
   const yearlySavings = selectedTier ? selectedTier * 12 * 0.1 : 0;
@@ -379,7 +389,7 @@ export default function DonatePage() {
               <button
                 onClick={handleDonate}
                 disabled={isProcessing}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="w-full cursor-pointer flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 {isProcessing ? (
                   'Processing...'

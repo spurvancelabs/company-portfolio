@@ -36,16 +36,47 @@ jobs:
 
       - name: Create .htaccess
         run: |
-          cat > apps/web/out/.htaccess << 'EOF'
-          RewriteEngine On
-          RewriteCond %{HTTPS} off
-          RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-          RewriteCond %{REQUEST_FILENAME} !-d
-          RewriteCond %{REQUEST_FILENAME}\.html -f
-          RewriteRule ^(.*)$ $1.html [L]
-          ErrorDocument 404 /404.html
-          Options -Indexes
-          EOF
+      - name: Create .htaccess
+        run: |
+          echo "Build output structure:"
+          ls -la apps/web/out/
+          
+          # Check if pages are files or folders
+          if [ -f "apps/web/out/about.html" ]; then
+            echo "Pages are HTML files"
+            cat > apps/web/out/.htaccess << 'EOF'
+            RewriteEngine On
+            RewriteCond %{HTTPS} off
+            RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteCond %{REQUEST_URI} (.+)/$
+            RewriteRule ^ %1 [R=301,L]
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteCond %{REQUEST_FILENAME}.html -f
+            RewriteRule ^(.+?)/?$ $1.html [L]
+            DirectoryIndex index.html
+            Options -Indexes
+            ErrorDocument 404 /404.html
+            EOF
+          else
+            echo "Pages are folders with index.html"
+            cat > apps/web/out/.htaccess << 'EOF'
+            RewriteEngine On
+            RewriteCond %{HTTPS} off
+            RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+            RewriteCond %{REQUEST_FILENAME} -d
+            RewriteRule ^(.+)/?$ $1/index.html [L]
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+            RewriteRule ^(.+?)/?$ $1.html [L]
+            Options -Indexes
+            ErrorDocument 404 /404.html
+            EOF
+          fi
+          
+          echo " .htaccess created based on build structure"
 
       - name: Deploy to cPanel
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4

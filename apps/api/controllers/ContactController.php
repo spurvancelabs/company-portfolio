@@ -59,7 +59,7 @@ class ContactController {
     }
     
     public function getAll() {
-        Security::requireApiKey();
+        // Security::requireApiKey();
         
         $contacts = $this->db->find(
             [],

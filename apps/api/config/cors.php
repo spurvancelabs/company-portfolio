@@ -3,7 +3,6 @@ namespace SpurvanceAPI\Config;
 
 class CORS {
     public static function setHeaders() {
-        // Allow specific origins
         $allowed_origins = [
             'https://spurvancelabs.com',
             'https://www.spurvancelabs.com',
@@ -15,7 +14,6 @@ class CORS {
         
         if (in_array($origin, $allowed_origins)) {
             header("Access-Control-Allow-Origin: $origin");
-            header('Access-Control-Allow-Credentials: true');
         } else {
             header('Access-Control-Allow-Origin: https://spurvancelabs.com');
         }

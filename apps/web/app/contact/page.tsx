@@ -121,25 +121,35 @@ function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+// Replace this part in your contact page
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Here you would integrate with your email service
-    console.log('Form submitted:', formData);
+    try {
+        const response = await fetch('https://api.spurvancelabs.com/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            setIsSubmitted(true);
+            setTimeout(() => {
+                setIsSubmitted(false);
+                setFormData({ name: '', email: '', company: '', message: '', service: 'general' });
+            }, 5000);
+        } else {
+            alert(data.error || 'Something went wrong');
+        }
+    } catch (error) {
+        alert('Failed to submit. Please try again.');
+    }
     
     setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    // Reset form after 5 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', company: '', message: '', service: 'general' });
-    }, 5000);
-  };
+};
 
   if (isSubmitted) {
     return (

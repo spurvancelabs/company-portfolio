@@ -28,3 +28,30 @@ dist-ssr
 *.sln
 *.sw?
 
+
+# Build outputs
+apps/web/out/
+apps/web/.next/
+apps/web/dist/
+apps/web/build/
+
+# Development cache
+apps/web/out/dev/
+apps/web/.turbo/
+
+# Data files (except structure)
+apps/api/data/*.json
+!apps/api/data/.gitkeep
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+error.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*

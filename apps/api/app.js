@@ -2,11 +2,15 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./src/config/db");
-const cors = require("cors");
 
 dotenv.config();
+
+const app = express();
+
+// connect DB
 connectDB();
 
+// middleware
 app.use(cors({
   origin: [
     "https://spurvancelabs.com",
@@ -17,13 +21,13 @@ app.use(cors({
   ],
   methods: ["GET", "POST", "OPTIONS"],
 }));
-const app = express();
 
-app.use(cors());
 app.use(express.json());
 
+// routes
 app.use("/api/waitlist", require("./src/routes/waitlistRoutes"));
 
+// test route
 app.get("/", (req, res) => {
   res.send("API running");
 });

@@ -29,3 +29,20 @@ exports.joinWaitlist = async (req, res) => {
     });
   }
 };
+
+exports.getWaitlist = async (req, res) => {
+  try {
+    const list = await Waitlist.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      message: "Waitlist fetched successfully",
+      count: list.length,
+      data: list,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};

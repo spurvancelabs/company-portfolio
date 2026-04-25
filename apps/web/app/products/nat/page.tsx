@@ -29,7 +29,7 @@ const WaitlistPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-const WAITLIST_API_URL = 'https://spurvancelabs.com/api/waitlist.php';
+const WAITLIST_API_URL = 'https://api.spurvancelabs.com/api/waitlist';
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();

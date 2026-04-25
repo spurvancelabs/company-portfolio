@@ -11,13 +11,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// app.use("/api/users", require("./src/routes/userRoutes"));
+app.use("/api/waitlist", require("./src/routes/waitlistRoutes"));
 
 app.get("/", (req, res) => {
   res.send("API running");
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

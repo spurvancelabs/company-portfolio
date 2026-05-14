@@ -4,6 +4,7 @@
  */
 'use client';
 
+import React from 'react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -62,9 +63,9 @@ const contactInfo: ContactInfo[] = [
 ];
 
 const socialLinks = [
-//   { icon: <Github size={20} />, href: 'https://github.com/spurvancelabs', label: 'GitHub' },
-//   { icon: <Twitter size={20} />, href: 'https://x.com/spurvancelabs', label: 'Twitter' },
-//   { icon: <Linkedin size={20} />, href: 'https://linkedin.com/company/spurvancelabs', label: 'LinkedIn' },
+  //   { icon: <Github size={20} />, href: 'https://github.com/spurvancelabs', label: 'GitHub' },
+  //   { icon: <Twitter size={20} />, href: 'https://x.com/spurvancelabs', label: 'Twitter' },
+  //   { icon: <Linkedin size={20} />, href: 'https://linkedin.com/company/spurvancelabs', label: 'LinkedIn' },
   { icon: <MessageCircle size={20} />, href: 'https://wa.me/923294171505', label: 'WhatsApp' },
 ];
 
@@ -121,35 +122,57 @@ function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-// Replace this part in your contact page
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
+
+    if (isSubmitting) return;
+
     try {
-        const response = await fetch('https://api.spurvancelabs.com/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
+      setIsSubmitting(true);
+
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: '884ab7c4-a8d6-45a6-a68d-39a049470612',
+
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          service: formData.service,
+          message: formData.message,
+
+          subject: 'New Contact Form Message',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setIsSubmitted(true);
+
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          message: '',
+          service: 'general',
         });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            setIsSubmitted(true);
-            setTimeout(() => {
-                setIsSubmitted(false);
-                setFormData({ name: '', email: '', company: '', message: '', service: 'general' });
-            }, 5000);
-        } else {
-            alert(data.error || 'Something went wrong');
-        }
-    } catch (error) {
-        alert('Failed to submit. Please try again.');
+
+        setTimeout(() => setIsSubmitted(false), 5000);
+      } else {
+        alert('Failed to send message');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Something went wrong');
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsSubmitting(false);
-};
+  };
 
   if (isSubmitted) {
     return (
@@ -176,6 +199,11 @@ const handleSubmit = async (e: React.FormEvent) => {
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Full Name *
           </label>
+          <input
+            type="checkbox"
+            name="botcheck"
+            className="hidden"
+          />
           <input
             type="text"
             required
@@ -274,7 +302,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      
+
       {/* ── Hero Section ── */}
       <section className="relative pt-36 pb-16 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none"
@@ -307,7 +335,7 @@ export default function ContactPage() {
             transition={{ delay: 0.15 }}
             className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
           >
-            Whether you have a project in mind, need technical advice, or just want to learn more 
+            Whether you have a project in mind, need technical advice, or just want to learn more
             about our work — reach out. We'd love to hear from you.
           </motion.p>
         </div>
@@ -317,7 +345,7 @@ export default function ContactPage() {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-8">
-            
+
             {/* Left - Contact Info */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}

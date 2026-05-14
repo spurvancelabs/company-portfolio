@@ -168,26 +168,20 @@ function ParticleField() {
 
   return (
     <points ref={meshRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={2500}
-          array={positions}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          count={2500}
-          array={colors}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-size"
-          count={2500}
-          array={sizes}
-          itemSize={1}
-        />
-      </bufferGeometry>
+<bufferGeometry>
+  <bufferAttribute
+    attach="attributes-position"
+    args={[positions, 3]}
+  />
+  <bufferAttribute
+    attach="attributes-color"
+    args={[colors, 3]}
+  />
+  <bufferAttribute
+    attach="attributes-size"
+    args={[sizes, 1]}
+  />
+</bufferGeometry>
       <pointsMaterial
         size={0.03}
         vertexColors
@@ -240,11 +234,9 @@ function ConnectingLines() {
     <lineSegments ref={lineRef}>
       <bufferGeometry>
         <bufferAttribute
-          attach="attributes-position"
-          count={200 * 2}
-          array={positions}
-          itemSize={3}
-        />
+  attach="attributes-position"
+  args={[positions, 3]}
+/>
       </bufferGeometry>
       <lineBasicMaterial color="#4f46e5" transparent opacity={0.08} />
     </lineSegments>

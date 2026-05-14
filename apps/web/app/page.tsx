@@ -65,7 +65,7 @@ function ParticleField() {
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
-      // Create a sphere-like distribution
+
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       const r = 3 + Math.random() * 4;

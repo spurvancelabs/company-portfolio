@@ -26,6 +26,7 @@ import {
   Brain,
   BookOpen,
   Sparkles,
+  Code,
   Laptop,
   GraduationCap,
   Play,
@@ -62,13 +63,13 @@ interface Course {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const categories = [
-  { name: 'All Courses', count: 12 },
-  { name: 'Development', count: 5 },
-  { name: 'Design', count: 2 },
+  { name: 'All Courses', count: 7 },
+  { name: 'Development', count: 4 },
+  { name: 'Design', count: 0 },
   { name: 'DevOps', count: 1 },
   { name: 'Security', count: 1 },
-  { name: 'AI/ML', count: 2 },
-  { name: 'Marketing', count: 1 },
+  { name: 'AI/ML', count: 1 },
+  { name: 'Marketing', count: 0 },
 ];
 
 const courses: Course[] = [
@@ -94,7 +95,7 @@ const courses: Course[] = [
     title: 'Cyber Security Essentials',
     category: 'Security',
     level: 'Intermediate',
-    price: 'PKR 30,000',
+    price: 'PKR 60,000',
     duration: '12 weeks',
     students: 350,
     rating: 4.8,
@@ -109,7 +110,7 @@ const courses: Course[] = [
     title: 'React Native Mobile Development',
     category: 'Development',
     level: 'Intermediate',
-    price: 'PKR 20,000',
+    price: 'PKR 25,000',
     duration: '10 weeks',
     students: 520,
     rating: 4.7,
@@ -124,12 +125,28 @@ const courses: Course[] = [
     title: 'Python Mastery: Zero to Hero',
     category: 'Development',
     level: 'Beginner',
-    price: 'PKR 10,000',
+    price: 'PKR 25,000',
     duration: '8 weeks',
     students: 2100,
     rating: 4.9,
     description: 'Learn Python from scratch. Cover data structures, algorithms, automation, and web development with Django.',
     topics: ['Python Basics', 'OOP', 'Data Structures', 'Django', 'Automation', 'APIs'],
+    featured: true,
+    instructor: 'Sarah Chen',
+    lessons: 32,
+  },
+    {
+    id: 'rust-mastery',
+    icon: <Code size={22} strokeWidth={1.5} />,
+    title: 'Rust Mastery: Zero to Hero',
+    category: 'Development',
+    level: 'Beginner',
+    price: 'PKR 15,000',
+    duration: '8 weeks',
+    students: 2100,
+    rating: 4.9,
+    description: 'Learn Rust from scratch. Cover data structures, algorithms, automation.',
+    topics: ['Rust Basics', 'OOP', 'Data Structures', 'Automation', 'APIs'],
     featured: true,
     instructor: 'Sarah Chen',
     lessons: 32,
@@ -140,7 +157,7 @@ const courses: Course[] = [
     title: 'AI & Machine Learning Bootcamp',
     category: 'AI/ML',
     level: 'Advanced',
-    price: 'PKR 45,000',
+    price: 'PKR 50,000',
     duration: '16 weeks',
     students: 280,
     rating: 4.9,
@@ -167,8 +184,8 @@ const courses: Course[] = [
 ];
 
 const stats = [
-  { icon: <Users size={18} strokeWidth={1.5} />, value: '4,900+', label: 'Students Enrolled' },
-  { icon: <BookOpen size={18} strokeWidth={1.5} />, value: '12', label: 'Active Courses' },
+  // { icon: <Users size={18} strokeWidth={1.5} />, value: '4,900+', label: 'Students Enrolled' },
+  { icon: <BookOpen size={18} strokeWidth={1.5} />, value: '7', label: 'Active Courses' },
   { icon: <Award size={18} strokeWidth={1.5} />, value: '4.8', label: 'Average Rating' },
   { icon: <TrendingUp size={18} strokeWidth={1.5} />, value: '92%', label: 'Completion Rate' },
 ];
@@ -449,7 +466,7 @@ export default function Courses() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto"
           >
             {stats.map((stat, index) => (
               <motion.div

@@ -6,18 +6,13 @@
  * See LICENSE file for details.
  */
 
-// ============================================================
-// INSTALL DEPENDENCIES:
-// npm install three @react-three/fiber @react-three/drei gsap @gsap/react lucide-react framer-motion
-// ============================================================
 
 'use client';
 
-import { useRef, useEffect, useState, useMemo, Suspense } from 'react';
+import { useRef, useEffect,  useMemo, Suspense } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -29,20 +24,10 @@ import {
   Code2,
   Zap,
   Shield,
-  Globe,
-  Users,
   Star,
   Cpu,
   Layers,
-  Sparkles,
-  CheckCircle2,
-  Menu,
-  X,
-  // Github,
-  // Twitter,
-  // Linkedin,
-  ExternalLink
-} from 'lucide-react';
+  CheckCircle2} from 'lucide-react';
 import * as THREE from 'three';
 
 // ─── Register GSAP plugins ───────────────────────────────────────────────────

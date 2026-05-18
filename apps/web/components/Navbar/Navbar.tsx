@@ -219,6 +219,7 @@ const MobileDropdown: React.FC<{ items: DropdownItem[]; onClose: () => void }> =
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const { isDark, toggleDarkMode, mounted } = useDarkMode();
   const pathname = usePathname();
@@ -280,7 +281,19 @@ const Navbar: React.FC = () => {
       </nav>
     );
   }
+  const handleDropdownEnter = (itemName: string) => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
 
+    setActiveDropdown(itemName);
+  };
+
+  const handleDropdownLeave = () => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 180); // small delay
+  };
   return (
     <>
       {/* Main Navbar */}
@@ -290,64 +303,69 @@ const Navbar: React.FC = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? 'bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm shadow-black/5'
-            : 'bg-white/50 dark:bg-gray-950/50 backdrop-blur-md border-b border-transparent'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+          ? 'bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm shadow-black/5'
+          : 'bg-white/50 dark:bg-gray-950/50 backdrop-blur-md border-b border-transparent'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 
-<Logo
-  size="md"
-  showTagline={false}
-/>
+            <Logo
+              size="md"
+              showTagline={false}
+            />
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1" ref={dropdownRef}>
               <div className="flex items-center gap-0.5">
                 {navItems.map((item) => (
-                  <div key={item.name} className="relative">
+                  <div
+                    key={item.name}
+                    className="relative"
+                    onMouseEnter={() =>
+                      item.hasDropdown && handleDropdownEnter(item.name)
+                    }
+                    onMouseLeave={handleDropdownLeave}
+                  >
                     {item.hasDropdown ? (
                       <button
                         onClick={() => toggleDropdown(item.name)}
-                        onMouseEnter={() => setActiveDropdown(item.name)}
                         className={`px-3 py-2 text-[13px] font-medium rounded-lg transition-all duration-200 flex items-center gap-1.5
-                          ${activeDropdown === item.name
+          ${activeDropdown === item.name
                             ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-900/20'
                             : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/50 dark:hover:bg-gray-800/50'
                           }`}
                       >
                         {item.name}
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          activeDropdown === item.name ? 'rotate-180' : ''
-                        }`} />
+
+                        <ChevronDown
+                          className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === item.name ? 'rotate-180' : ''
+                            }`}
+                        />
                       </button>
                     ) : (
                       <Link
                         href={item.path}
                         className={`px-3 py-2 text-[13px] font-medium rounded-lg transition-all duration-200 relative group
-                          ${pathname === item.path
+          ${pathname === item.path
                             ? 'text-indigo-600 dark:text-indigo-400'
                             : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                           }`}
                       >
                         {item.name}
-                        {pathname === item.path && (
-                          <motion.div
-                            layoutId="activeNav"
-                            className="absolute inset-0 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg -z-10"
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                          />
-                        )}
                       </Link>
                     )}
 
                     <AnimatePresence>
-                      {item.hasDropdown && activeDropdown === item.name && item.dropdown && (
-                        <DesktopDropdown items={item.dropdown} onClose={() => setActiveDropdown(null)} />
-                      )}
+                      {item.hasDropdown &&
+                        activeDropdown === item.name &&
+                        item.dropdown && (
+                          <DesktopDropdown
+                            items={item.dropdown}
+                            onClose={() => setActiveDropdown(null)}
+                          />
+                        )}
                     </AnimatePresence>
                   </div>
                 ))}
@@ -452,9 +470,8 @@ const Navbar: React.FC = () => {
                             <span className="text-gray-400 dark:text-gray-500">{item.icon}</span>
                             {item.name}
                           </div>
-                          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                            activeDropdown === item.name ? 'rotate-180' : ''
-                          }`} />
+                          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${activeDropdown === item.name ? 'rotate-180' : ''
+                            }`} />
                         </button>
                         <AnimatePresence>
                           {activeDropdown === item.name && item.dropdown && (

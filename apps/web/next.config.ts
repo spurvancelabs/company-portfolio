@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
   },
   
   // No trailing slashes for cleaner URLs
-  trailingSlash: false,
+  trailingSlash: true,
   
   // Build-time environment variables
   env: {

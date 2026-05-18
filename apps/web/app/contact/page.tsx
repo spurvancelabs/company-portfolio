@@ -20,8 +20,15 @@ import {
   Globe,
   ArrowRight,
   Building2,
-  Users
 } from 'lucide-react';
+
+import {
+  FaGithub,
+  FaLinkedin,
+  FaXTwitter,
+  FaInstagram,
+  FaWhatsapp
+} from 'react-icons/fa6';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -63,10 +70,31 @@ const contactInfo: ContactInfo[] = [
 ];
 
 const socialLinks = [
-  //   { icon: <Github size={20} />, href: 'https://github.com/spurvancelabs', label: 'GitHub' },
-  //   { icon: <Twitter size={20} />, href: 'https://x.com/spurvancelabs', label: 'Twitter' },
-  //   { icon: <Linkedin size={20} />, href: 'https://linkedin.com/company/spurvancelabs', label: 'LinkedIn' },
-  { icon: <MessageCircle size={20} />, href: 'https://wa.me/923294171505', label: 'WhatsApp' },
+  {
+    icon: <FaGithub size={18} />,
+    href: 'https://github.com/spurvancelabs',
+    label: 'GitHub'
+  },
+  {
+    icon: <FaXTwitter size={18} />,
+    href: 'https://x.com/spurvancelabs',
+    label: 'X'
+  },
+  {
+    icon: <FaLinkedin size={18} />,
+    href: 'https://linkedin.com/company/spurvancelabs',
+    label: 'LinkedIn'
+  },
+  {
+    icon: <FaInstagram size={18} />,
+    href: 'https://instagram.com/spurvancelabs',
+    label: 'Instagram'
+  },
+  {
+    icon: <FaWhatsapp size={18} />,
+    href: 'https://wa.me/923294171505',
+    label: 'WhatsApp'
+  }
 ];
 
 const faqs: FAQItem[] = [
@@ -502,7 +530,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── CTA - Open Source ── */}
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-purple-700 dark:from-blue-700 dark:to-purple-800">
+      <section className="py-16 px-4   dark:from-blue-700 dark:to-purple-800">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -521,9 +549,9 @@ export default function ContactPage() {
               href="https://github.com/spurvancelabs"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-blue-700 font-semibold text-sm hover:bg-blue-50 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-semibold text-sm hover:bg-blue-50 transition-all"
             >
-              {/* <Github size={18} /> */}
+              <FaGithub size={18} />
               Visit GitHub
               <ArrowRight size={16} />
             </a>

@@ -6,7 +6,6 @@
 .env.local
 # testing
 /coverage
-
 # next.js
 /.next/
 /out/
@@ -38,3 +37,8 @@ next-env.d.ts
 
 # turbo
 .turbo
+.vscode
+vscode
+/vscode
+/.vscode
+

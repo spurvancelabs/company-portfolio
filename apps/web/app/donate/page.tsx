@@ -6,14 +6,13 @@
  * See LICENSE file for details.
  */
 
-'use client';
 import Link from "next/link"
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import type { Metadata } from 'next';
 import {
   Heart,
   Shield,
-//   Github,
   Lock,
   Coffee,
   TrendingUp,
@@ -30,6 +29,39 @@ import {
   Building2,
   Download
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "Donate | Support Spurvance Labs | Open Source Funding",
+  description: "Support open-source development at Spurvance Labs. Fund privacy-first tools, infrastructure, and community programs. Monthly or yearly donations.",
+  keywords: [
+    "donate",
+    "open source",
+    "support",
+    "funding",
+    "privacy",
+    "infrastructure",
+    "sponsorship"
+  ],
+  openGraph: {
+    title: "Donate | Support Spurvance Labs | Open Source Funding",
+    description: "Support open-source development. Fund privacy-first tools and community programs.",
+    type: "website",
+    url: "https://spurvancelabs.com/donate",
+    images: [
+      {
+        url: "https://spurvancelabs.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Support Spurvance Labs",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Donate | Support Spurvance Labs | Open Source Funding",
+    description: "Support open-source development. Fund privacy-first tools and community programs.",
+  },
+};
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -210,6 +242,8 @@ function DonationButton({ tier, isSelected, onSelect }: {
 }
 
 // ─── Main Page Component ───────────────────────────────────────────────────────
+
+'use client';
 
 export default function DonatePage() {
   const [selectedTier, setSelectedTier] = useState<number | null>(50);

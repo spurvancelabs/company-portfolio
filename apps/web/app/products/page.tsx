@@ -3,11 +3,10 @@
  * Copyright (c) 2026 Spurvance Labs
  */
 
-'use client';
-
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import type { Metadata } from 'next';
 import { 
   Shield, 
   Lock, 
@@ -24,6 +23,42 @@ import {
   Mail
 } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
+
+export const metadata: Metadata = {
+  title: "Products | Spurvance Labs | Open Source Privacy Tools",
+  description: "NAT Chat - Pakistan's first end-to-end encrypted messaging app. Privacy-first, open-source communication platform. AI Platform coming soon.",
+  keywords: [
+    "encrypted messaging",
+    "privacy",
+    "open source",
+    "NAT Chat",
+    "secure communication",
+    "Pakistan",
+    "AI platform"
+  ],
+  openGraph: {
+    title: "Products | Spurvance Labs | Open Source Privacy Tools",
+    description: "NAT Chat - End-to-end encrypted messaging. Privacy-first, open-source communication platform.",
+    type: "website",
+    url: "https://spurvancelabs.com/products",
+    images: [
+      {
+        url: "https://spurvancelabs.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Spurvance Labs Products",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Products | Spurvance Labs | Open Source Privacy Tools",
+    description: "NAT Chat - End-to-end encrypted messaging. Privacy-first, open-source communication.",
+  },
+};
+
+'use client';
+
 const ProductsPage = () => {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({

@@ -6,14 +6,13 @@
  * See LICENSE file for details.
  */
 
-'use client';
-
 import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import type { Metadata } from 'next';
 import {
   Server,
   Code2,
@@ -41,6 +40,40 @@ import {
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
+
+export const metadata: Metadata = {
+  title: "Services | Spurvance Labs | DevOps, Development & Security",
+  description: "Enterprise-grade DevOps, full-stack development, security engineering, and tech training. Open-source first approach. Free consultation available.",
+  keywords: [
+    "DevOps services",
+    "cloud engineering",
+    "software development",
+    "security engineering",
+    "tech training",
+    "infrastructure",
+    "CI/CD",
+    "Kubernetes"
+  ],
+  openGraph: {
+    title: "Services | Spurvance Labs | DevOps, Development & Security",
+    description: "Enterprise-grade services: DevOps, development, security, and training. Open-source first. Free consultation.",
+    type: "website",
+    url: "https://spurvancelabs.com/services",
+    images: [
+      {
+        url: "https://spurvancelabs.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Spurvance Labs Services",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Services | Spurvance Labs | DevOps, Development & Security",
+    description: "Enterprise-grade services: DevOps, development, security, and training. Open-source first.",
+  },
+};
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -289,6 +322,8 @@ function ProcessStepCard({ step, index }: { step: ProcessStep; index: number }) 
 }
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
+
+'use client';
 
 export default function ServicesPage() {
   const heroRef = useRef<HTMLDivElement>(null);

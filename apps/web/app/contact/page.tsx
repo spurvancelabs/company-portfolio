@@ -2,12 +2,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  * Copyright (c) 2026 Spurvance Labs
  */
-'use client';
 
 import React from 'react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import {
   Mail,
   Phone,
@@ -124,6 +124,39 @@ const faqs: FAQItem[] = [
   }
 ];
 
+export const metadata: Metadata = {
+  title: "Contact Spurvance Labs | Get in Touch",
+  description: "Reach out to Spurvance Labs for DevOps, development, security, or training services. Free consultation available. Based in Lahore, Pakistan. Serving clients globally.",
+  keywords: [
+    "contact",
+    "DevOps services",
+    "software development",
+    "security consulting",
+    "training",
+    "Pakistan",
+    "consultation"
+  ],
+  openGraph: {
+    title: "Contact Spurvance Labs | Get in Touch",
+    description: "Reach out to Spurvance Labs for enterprise services. Free 30-minute consultation available.",
+    type: "website",
+    url: "https://spurvancelabs.com/contact",
+    images: [
+      {
+        url: "https://spurvancelabs.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Contact Spurvance Labs",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Spurvance Labs | Get in Touch",
+    description: "Reach out to Spurvance Labs for enterprise services. Free 30-minute consultation available.",
+  },
+};
+
 // ─── Animation Variants ────────────────────────────────────────────────────────
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -138,6 +171,8 @@ const stagger = {
 };
 
 // ─── Form Component ────────────────────────────────────────────────────────────
+
+'use client';
 
 function ContactForm() {
   const [formData, setFormData] = useState({

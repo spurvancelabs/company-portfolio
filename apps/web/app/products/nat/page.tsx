@@ -3,11 +3,10 @@
  * Copyright (c) 2026 Spurvance Labs
  */
 
-'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { Metadata } from 'next';
 import {
   ArrowRight,
   Check,
@@ -26,6 +25,39 @@ import {
   Zap,
   X,
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "NAT Chat | Secure Encrypted Messaging | Spurvance Labs",
+  description: "NAT Chat - Pakistan's first open-source, end-to-end encrypted messaging platform. Privacy-first communication. Join the waitlist for preview access.",
+  keywords: [
+    "NAT Chat",
+    "encrypted messaging",
+    "secure communication",
+    "privacy",
+    "open source",
+    "Pakistan",
+    "messaging app"
+  ],
+  openGraph: {
+    title: "NAT Chat | Secure Encrypted Messaging | Spurvance Labs",
+    description: "Pakistan's first open-source, end-to-end encrypted messaging platform. Privacy-first communication.",
+    type: "website",
+    url: "https://spurvancelabs.com/products/nat",
+    images: [
+      {
+        url: "https://spurvancelabs.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "NAT Chat - Secure Messaging",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NAT Chat | Secure Encrypted Messaging | Spurvance Labs",
+    description: "Pakistan's first open-source, end-to-end encrypted messaging platform.",
+  },
+};
 
 const WEB3FORMS_ACCESS_KEY =
   '7bee7d3e-2c37-475c-b80a-a92f8b18633b';
@@ -75,6 +107,8 @@ const faqs = [
     a: 'Yes. The platform is being designed for modern mobile and desktop experiences.',
   },
 ];
+
+'use client';
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState('');

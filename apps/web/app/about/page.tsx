@@ -1,468 +1,696 @@
+'use client';
+
 /*
  * SPDX-License-Identifier: AGPL-3.0-or-later
  * Copyright (c) 2026 Spurvance Labs
  */
-'use client';
 
 import Link from 'next/link';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, Suspense } from 'react';
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Sphere, MeshDistortMaterial, Float, Stars, Environment } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+import * as THREE from 'three';
 import {
-  Shield,
-  Code,
-  Heart,
-  Globe,
-  Lock,
-  ShieldCheck,
-  ArrowRight,
-  Quote,
-  Sparkles,
-  Cpu,
-  Users,
-  Eye,
-  Zap,
-  Target,
-  Award,
-  Star
+  Shield, Code, Heart, Globe, Lock, ShieldCheck, ArrowRight,
+  Sparkles, Cpu, Users, Eye, Zap, Target, Award, Star,
+  Mail, MapPin, Quote, ChevronDown
 } from 'lucide-react';
-
+import { FaLinkedin } from 'react-icons/fa6';
 gsap.registerPlugin(ScrollTrigger);
 
-const AboutPage = () => {
-  const targetRef = useRef<HTMLElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const valuesRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
+// ─── Three.js Components ────────────────────────────────────────────────────
 
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end start"]
+function FloatingOrb({ position, color, speed = 1, distort = 0.4 }: {
+  position: [number, number, number];
+  color: string;
+  speed?: number;
+  distort?: number;
+}) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * speed * 0.3) * 0.2;
+    meshRef.current.rotation.y += 0.003 * speed;
   });
+  return (
+    <Float speed={speed} rotationIntensity={0.5} floatIntensity={1.5}>
+      <Sphere ref={meshRef} args={[1, 64, 64]} position={position}>
+        <MeshDistortMaterial
+          color={color}
+          attach="material"
+          distort={distort}
+          speed={2}
+          roughness={0.1}
+          metalness={0.8}
+          transparent
+          opacity={0.85}
+        />
+      </Sphere>
+    </Float>
+  );
+}
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
+function HeroScene() {
+  return (
+    <>
+      <Stars radius={80} depth={50} count={3000} factor={4} saturation={0} fade speed={0.5} />
+      <ambientLight intensity={0.3} />
+      <pointLight position={[10, 10, 10]} intensity={1.5} color="#3b82f6" />
+      <pointLight position={[-10, -10, -5]} intensity={0.8} color="#8b5cf6" />
+      <FloatingOrb position={[2.5, 0.5, -2]} color="#1d4ed8" speed={0.8} distort={0.5} />
+      <FloatingOrb position={[-2.8, -0.5, -3]} color="#4f46e5" speed={1.2} distort={0.3} />
+      <FloatingOrb position={[0, 1.5, -4]} color="#0ea5e9" speed={0.6} distort={0.6} />
+    </>
+  );
+}
+
+// ─── Animated Counter ────────────────────────────────────────────────────────
+
+function AnimatedCounter({ target, suffix = '' }: { target: string; suffix?: string }) {
+  const [display, setDisplay] = useState('0');
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
 
   useEffect(() => {
-    // GSAP animations
-    const ctx = gsap.context(() => {
-      // Hero parallax elements
-      gsap.fromTo('.hero-element',
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.2,
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: 'top 80%',
-          }
-        }
-      );
+    if (!inView) return;
+    const num = parseFloat(target.replace(/[^0-9.]/g, ''));
+    if (isNaN(num)) { setDisplay(target); return; }
+    let start = 0;
+    const step = num / 60;
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= num) { setDisplay(target); clearInterval(timer); return; }
+      setDisplay(Math.floor(start).toString() + suffix);
+    }, 16);
+    return () => clearInterval(timer);
+  }, [inView, target, suffix]);
 
-      // Timeline animations
-      gsap.fromTo('.timeline-item',
-        { opacity: 0, x: -50 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          stagger: 0.3,
-          scrollTrigger: {
-            trigger: timelineRef.current,
-            start: 'top 70%',
-          }
-        }
-      );
+  return <span ref={ref}>{display}</span>;
+}
 
-      // Value cards hover animations
-      document.querySelectorAll('.value-card').forEach((card) => {
-        card.addEventListener('mouseenter', () => {
-          gsap.to(card, {
-            scale: 1.05,
-            duration: 0.3,
-            ease: 'power2.out'
-          });
-        });
-        card.addEventListener('mouseleave', () => {
-          gsap.to(card, {
-            scale: 1,
-            duration: 0.3,
-            ease: 'power2.out'
-          });
-        });
-      });
-    });
+// ─── Data ────────────────────────────────────────────────────────────────────
 
-    return () => ctx.revert();
-  }, []);
+const values = [
+  { icon: Lock, title: 'Privacy First', description: 'End-to-end encryption with zero surveillance. Complete data sovereignty for every user on every platform.', stat: '100% Encrypted', accent: '#3b82f6' },
+  { icon: ShieldCheck, title: 'Open Source', description: 'Transparent code, community audited. No hidden backdoors, no proprietary lock-in — ever.', stat: '100% Open', accent: '#10b981' },
+  { icon: Globe, title: 'For the Ummah', description: 'Digital freedom for Muslims and ordinary people worldwide, without compromise or surveillance.', stat: 'Global Reach', accent: '#8b5cf6' },
+  { icon: Heart, title: 'Made in Pakistan', description: 'Built locally. Solving local problems. Serving the global community with pride and purpose.', stat: 'Local First', accent: '#f59e0b' },
+];
 
-  const values = [
-    {
-      icon: Lock,
-      title: 'Privacy First',
-      description: 'End-to-end encryption. Zero surveillance. Complete data sovereignty for every user.',
-      color: 'blue',
-      stat: '100% Encrypted',
-      statIcon: Shield
-    },
-    {
-      icon: ShieldCheck,
-      title: 'Open Source',
-      description: 'Transparent code. Community audited. No hidden backdoors or proprietary lock-in.',
-      color: 'green',
-      stat: '100% Open',
-      statIcon: Code
-    },
-    {
-      icon: Globe,
-      title: 'For the Ummah',
-      description: 'Digital freedom for Muslims and ordinary people worldwide, without compromise.',
-      color: 'purple',
-      stat: 'Global Reach',
-      statIcon: Users
-    },
-    {
-      icon: Heart,
-      title: 'Made in Pakistan',
-      description: 'Built locally. Solving local problems. Serving the global community with pride.',
-      color: 'red',
-      stat: 'Local First',
-      statIcon: Award
-    }
-  ];
+const stats = [
+  { number: '5000', suffix: '+', label: 'Active Users', icon: Users },
+  { number: '100', suffix: '%', label: 'Privacy Focused', icon: Shield },
+  { number: '24', suffix: '/7', label: 'Support', icon: Zap },
+  { number: '50', suffix: '+', label: 'Enterprise Clients', icon: Target },
+];
 
-  const achievements = [
-    { number: '5000+', label: 'Active Users', icon: Users },
-    { number: '100%', label: 'Privacy Focused', icon: Shield },
-    { number: '24/7', label: 'Support', icon: Zap },
-    { number: '50+', label: 'Enterprise Clients', icon: Target }
-  ];
+const team = [
+  {
+    name: 'Muhammad Abdullah Khaver',
+    role: 'Founder & CEO',
+    bio: 'Visionary leader driving privacy-first innovation. Previously founded IT-Khaver, now leading Spurvance Labs towards digital sovereignty.',
+    image: '/ceo.jpeg',
+    email: 'abdullah@spurvancelabs.com',
+    linkedin: 'https://linkedin.com/in/abdullahkhaver',
+    location: 'Lahore, Pakistan',
+    expertise: ['Security', 'Infrastructure', 'Product Strategy', 'Open Source'],
+    accent: '#3b82f6'
+  },
 
-  const connectWithFounder = () => {
-    window.location.href =
-      "mailto:abdullahkhaver@spurvnacelabs.com?subject=Connect%20with%20Founder%20-%20Spurvance%20Labs&body=Hi%20Muhammad%20Abdullah%20Khaver%2C%0A%0AI%20would%20like%20to%20connect%20with%20you%20regarding...";
-  };
+  {
+    name: 'Muhammad Hamza',
+    role: 'COO',
+    bio: 'Operations expert ensuring seamless delivery of products and services. Focuses on scaling teams and maintaining operational excellence.',
+    image: '/coo.jpeg',
+    email: 'hamza@spurvancelabs.com',
+    // linkedin: 'https://linkedin.com/in/muhammad-hamza',
+    location: 'Lahore, Pakistan',
+    expertise: ['Operations', 'Scale', 'Strategy', 'Team Building'],
+    accent: '#10b981'
+  },
+
+  {
+    name: 'Nozaib Amjad',
+    role: 'Outreach & Founding Partner',
+    bio: 'Strategic partnerships and community engagement. Builds bridges between technology and communities we serve.',
+    image: '/outreach.jpeg',
+    email: 'nozaib@spurvancelabs.com',
+    // linkedin: 'https://linkedin.com/in/nozaib-amjad',
+    location: 'Islamabad, Pakistan',
+    expertise: ['Partnerships', 'Community', 'Business Dev', 'Advocacy'],
+    accent: '#8b5cf6'
+  },
+
+  {
+    name: 'Muhammad Muaaz',
+    role: 'CMO',
+    bio: 'Marketing strategist focused on communicating our privacy-first mission to the world. Drives brand growth and user acquisition.',
+    image: '/cmo.jpeg',
+    email: 'muaaz@spurvancelabs.com',
+    // linkedin: 'https://linkedin.com/in/muhammad-muaaz',
+    location: 'Dubai, UAE',
+    expertise: ['Marketing', 'Brand', 'Growth', 'Digital Strategy'],
+    accent: '#f59e0b'
+  },
+];
+
+const timeline = [
+  { year: '2020', label: 'ORIGIN', title: 'IT-Khaver Founded', desc: 'Service-based company helping businesses navigate technology with precision and care.', color: '#64748b' },
+  { year: '2025', label: 'EVOLUTION', title: 'Spurvance Labs Born', desc: 'Hybrid model — Services + Products for Digital Pakistan and the broader Muslim world.', color: '#3b82f6' },
+  { year: 'NOW', label: 'PRESENT', title: 'Products for Freedom', desc: 'Building encrypted tools that protect privacy and ensure digital sovereignty for all.', color: '#8b5cf6' },
+];
+
+// ─── Sub-components ──────────────────────────────────────────────────────────
+
+function ValueCard({ v, index }: { v: typeof values[0]; index: number }) {
+  const [hovered, setHovered] = useState(false);
   return (
-    <main ref={targetRef} className="bg-white dark:bg-gray-900 overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="relative group overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm p-7 cursor-pointer"
+      style={{
+        boxShadow: hovered ? `0 0 40px ${v.accent}22, inset 0 0 40px ${v.accent}08` : 'none',
+        borderColor: hovered ? `${v.accent}44` : undefined,
+        transition: 'box-shadow 0.4s, border-color 0.4s',
+      }}
+    >
+      {/* Glow blob */}
+      <motion.div
+        animate={{ opacity: hovered ? 1 : 0, scale: hovered ? 1 : 0.5 }}
+        transition={{ duration: 0.4 }}
+        className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl pointer-events-none"
+        style={{ background: v.accent }}
+      />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:30px_30px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] opacity-30" />
+      <div
+        className="relative w-12 h-12 rounded-xl flex items-center justify-center mb-5"
+        style={{ background: `${v.accent}18`, border: `1px solid ${v.accent}30` }}
+      >
+        <v.icon className="w-6 h-6" style={{ color: v.accent }} />
+      </div>
 
-        {/* Animated circles */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
+      <h3 className="text-lg font-semibold text-white mb-2 tracking-tight">{v.title}</h3>
+      <p className="text-sm text-gray-400 leading-relaxed mb-5">{v.description}</p>
 
+      <div
+        className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full"
+        style={{ background: `${v.accent}15`, color: v.accent }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full" style={{ background: v.accent }} />
+        {v.stat}
+      </div>
+    </motion.div>
+  );
+}
+
+function TeamCard({ member, index }: { member: typeof team[0]; index: number }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="relative group rounded-2xl overflow-hidden border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm"
+      style={{
+        boxShadow: hovered ? `0 20px 60px ${member.accent}20` : 'none',
+        transition: 'box-shadow 0.4s',
+      }}
+    >
+      {/* Top accent line */}
+      <div className="h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${member.accent}, transparent)` }} />
+
+      {/* Image */}
+      <div className="relative px-6 pt-8 pb-4">
+        <div className="relative w-24 h-24 mx-auto">
+          <motion.div
+            animate={{ opacity: hovered ? 0.6 : 0, scale: hovered ? 1.2 : 1 }}
+            className="absolute inset-0 rounded-full blur-2xl"
+            style={{ background: member.accent }}
+          />
+          <div className="relative w-full h-full rounded-full overflow-hidden ring-2"
+            style={{ ringColor: `${member.accent}44` }}>
+            <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+
+      <div className="px-6 pb-7 text-center">
+        <h3 className="text-base font-semibold text-white mb-0.5">{member.name}</h3>
+        <p className="text-xs font-medium mb-2" style={{ color: member.accent }}>{member.role}</p>
+
+        <div className="flex items-center justify-center gap-1 text-xs text-gray-500 mb-3">
+          <MapPin className="w-3 h-3" />
+          {member.location}
+        </div>
+
+        <p className="text-xs text-gray-400 leading-relaxed mb-4">{member.bio}</p>
+
+        <div className="flex flex-wrap justify-center gap-1.5 mb-5">
+          {member.expertise.map((s) => (
+            <span key={s} className="px-2 py-0.5 text-xs rounded-full text-gray-400 bg-white/[0.05] border border-white/[0.06]">
+              {s}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-center gap-3 pt-4 border-t border-white/[0.06]">
+          <a href={member.linkedin} target="_blank" rel="noopener noreferrer"
+            className="p-2 rounded-lg transition-all hover:scale-110"
+            style={{ background: `${member.accent}18` }}>
+            <FaLinkedin className="w-3.5 h-3.5" style={{ color: member.accent }} />
+          </a>
+          <a href={`mailto:${member.email}`}
+            className="p-2 rounded-lg transition-all hover:scale-110"
+            style={{ background: `${member.accent}18` }}>
+            <Mail className="w-3.5 h-3.5" style={{ color: member.accent }} />
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Main Page ───────────────────────────────────────────────────────────────
+
+const AboutPage = () => {
+  const wrapperRef = useRef<HTMLElement>(null);
+  const heroTextRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({ target: wrapperRef, offset: ['start start', 'end start'] });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.25], [0, -80]);
+
+  // Lenis smooth scroll
+  // useEffect(() => {
+  //   const lenis = new Lenis({ duration: 1.4, easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+  //   const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf); };
+  //   requestAnimationFrame(raf);
+
+  //   // GSAP ScrollTrigger integration
+  //   lenis.on('scroll', ScrollTrigger.update);
+  //   gsap.ticker.add((time) => lenis.raf(time * 1000));
+  //   gsap.ticker.lagSmoothing(0);
+
+  //   return () => { lenis.destroy(); };
+  // }, []);
+
+  // // GSAP hero reveal
+  // useEffect(() => {
+  //   if (!heroTextRef.current) return;
+  //   const ctx = gsap.context(() => {
+  //     gsap.fromTo('.gsap-reveal',
+  //       { opacity: 0, y: 60, skewY: 3 },
+  //       { opacity: 1, y: 0, skewY: 0, duration: 1.2, stagger: 0.15, ease: 'power4.out', delay: 0.3 }
+  //     );
+  //   }, heroTextRef);
+  //   return () => ctx.revert();
+  // }, []);
+
+  // // GSAP horizontal scroll for timeline
+  // useEffect(() => {
+  //   const ctx = gsap.context(() => {
+  //     gsap.fromTo('.tl-item',
+  //       { opacity: 0, x: -60 },
+  //       {
+  //         opacity: 1, x: 0, duration: 0.8, stagger: 0.25, ease: 'power3.out',
+  //         scrollTrigger: { trigger: '.tl-wrapper', start: 'top 75%' }
+  //       }
+  //     );
+  //   });
+  //   return () => ctx.revert();
+  // }, []);
+
+  return (
+    <main
+      ref={wrapperRef}
+      className="relative overflow-x-hidden"
+      style={{
+        background: '#050810',
+        color: '#f1f5f9',
+        fontFamily: '"DM Sans", system-ui, sans-serif',
+      }}
+    >
+
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+
+        {/* Three.js Canvas */}
+        <div className="absolute inset-0 z-0">
+          <Canvas camera={{ position: [0, 0, 6], fov: 60 }} gl={{ alpha: true, antialias: true }}>
+            <Suspense fallback={null}>
+              <HeroScene />
+            </Suspense>
+          </Canvas>
+        </div>
+
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-[#050810]/30 to-[#050810]" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#050810]/60 via-transparent to-transparent" />
+
+        {/* Noise texture */}
+        <div className="absolute inset-0 z-10 opacity-[0.03]"
+          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat', backgroundSize: '128px' }} />
+
+        {/* Hero content */}
         <motion.div
-          ref={heroRef}
-          style={{ opacity, y }}
-          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"
+          style={{ opacity: heroOpacity, y: heroY }}
+          className="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 py-28 w-full"
         >
-          <div className="max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="hero-element"
-            >
-              <span className="inline-flex items-center gap-2 text-sm font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
-                <Sparkles className="w-3 h-3" />
-                OUR JOURNEY
-              </span>
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white mt-6 mb-6 leading-[1.2] tracking-tight">
-                From Services to
-                <span className="block text-blue-600 dark:text-blue-400 mt-2"> Digital Freedom</span>
-              </h1>
-            </motion.div>
+          <div ref={heroTextRef} className="max-w-3xl">
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="hero-element space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed"
-            >
+            <div className="gsap-reveal mb-6">
+              <span className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-blue-400 border border-blue-400/30 bg-blue-400/5 px-4 py-2 rounded-full">
+                <Sparkles className="w-3 h-3" />
+                SPURVANCE LABS · ABOUT
+              </span>
+            </div>
+
+            <div className="gsap-reveal">
+              <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.92] tracking-tighter mb-2">
+                <span style={{
+                  background: 'linear-gradient(135deg, #fff 0%, #94a3b8 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}>From Services</span>
+              </h1>
+            </div>
+
+            <div className="gsap-reveal">
+              <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.92] tracking-tighter mb-8">
+                <span style={{
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}>to Digital Freedom</span>
+              </h1>
+            </div>
+
+            <div className="gsap-reveal space-y-4 text-base text-gray-400 leading-relaxed max-w-xl">
               <p>
-                We started as <span className="font-semibold text-gray-900 dark:text-white">IT-Khaver</span> in 2020 — a service-based company
+                We started as <strong className="text-white font-medium">IT-Khaver</strong> in 2020 — a service-based company
                 helping businesses navigate their technology needs with precision and care.
               </p>
               <p>
-                In <span className="font-semibold text-gray-900 dark:text-white">2025</span>, we evolved into <span className="font-semibold text-gray-900 dark:text-white">Spurvance Labs</span>,
-                embracing a hybrid model that seamlessly blends enterprise services with innovative in-house products.
+                In <strong className="text-white font-medium">2025</strong>, we evolved into{' '}
+                <strong className="text-white font-medium">Spurvance Labs</strong>,
+                embracing a hybrid model blending enterprise services with innovative in-house products.
               </p>
-              <div className="pt-4">
-                <p className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
-                  Our mission is bold but clear:
-                </p>
-                <blockquote className="border-l-4 border-blue-600 pl-6 italic text-gray-700 dark:text-gray-300 text-lg">
-                  "To build privacy-first software that protects individuals, businesses, and communities from digital surveillance through encrypted communication and secure infrastructure."
-                </blockquote>
-              </div>
-            </motion.div>
+            </div>
+
+            <div className="gsap-reveal flex flex-wrap items-center gap-4 mt-10">
+              <Link
+                href="/products/nat"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium text-white transition-all"
+                style={{ background: 'linear-gradient(135deg, #3b82f6, #6366f1)', boxShadow: '0 0 30px #3b82f644' }}
+              >
+                Try NAT Chat
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium text-gray-300 border border-white/10 hover:border-white/30 hover:text-white transition-all"
+              >
+                Work With Us
+                <Heart className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              </Link>
+            </div>
           </div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-gray-500"
+        >
+          <span className="text-xs font-mono tracking-widest">SCROLL</span>
+          <ChevronDown className="w-4 h-4" />
         </motion.div>
       </section>
 
-      {/* Stats Bar */}
-      <section className="border-y border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {achievements.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <item.icon className="w-6 h-6 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">{item.number}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{item.label}</div>
-              </motion.div>
-            ))}
-          </div>
+      {/* ── STATS BAR ─────────────────────────────────────────────────────── */}
+      <section
+        className="relative z-10 border-y border-white/[0.06] backdrop-blur-sm"
+        style={{ background: 'rgba(255,255,255,0.02)' }}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((s, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <s.icon className="w-5 h-5 text-blue-400 mx-auto mb-3 opacity-70" />
+              <div className="text-3xl font-bold tracking-tighter text-white">
+                <AnimatedCounter target={s.number} suffix={s.suffix} />
+              </div>
+              <div className="text-xs text-gray-500 mt-1 tracking-wide uppercase font-mono">{s.label}</div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* Identity + Founder Section */}
-      {/* Identity + Founder Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-start">
+      {/* ── MISSION QUOTE ─────────────────────────────────────────────────── */}
+      <section className="py-28 max-w-7xl mx-auto px-6 lg:px-12">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true }}
+          className="relative"
+        >
+          <Quote
+            className="absolute -top-4 -left-2 opacity-10"
+            style={{ width: 80, height: 80, color: '#3b82f6' }}
+          />
+          <blockquote
+            className="text-2xl sm:text-3xl lg:text-4xl font-semibold leading-[1.3] tracking-tight pl-6 max-w-4xl"
+            style={{
+              borderLeft: '3px solid',
+              borderImage: 'linear-gradient(180deg, #3b82f6, #8b5cf6) 1',
+            }}
+          >
+            <span style={{
+              background: 'linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}>
+              "To build privacy-first software that protects individuals, businesses, and communities
+              from digital surveillance through encrypted communication and secure infrastructure."
+            </span>
+          </blockquote>
+          <p className="mt-6 ml-6 text-sm text-gray-500 font-mono tracking-wide">— Spurvance Labs Mission Statement</p>
+        </motion.div>
+      </section>
 
-          {/* Company Definition */}
+      {/* ── WHO WE ARE + FOUNDER ──────────────────────────────────────────── */}
+      <section className="py-20 max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+
+          {/* Left: Identity */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
           >
-            <span className="text-sm font-mono text-blue-600 dark:text-blue-400">WHO WE ARE</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mt-4 mb-6 leading-tight">
-              Spurvance Labs is a <span className="text-blue-600 dark:text-blue-400">Privacy-First</span> Software Company
+            <span className="text-xs font-mono tracking-widest text-blue-400 mb-4 block">WHO WE ARE</span>
+            <h2 className="text-3xl sm:text-4xl font-bold leading-tight tracking-tighter mb-6">
+              A{' '}
+              <span style={{
+                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>Privacy-First</span>{' '}
+              Software Company
             </h2>
-            <div className="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed">
-              <p>
-                We design and build secure digital systems focused on privacy, encryption,
-                and open-source infrastructure. Our goal is to give individuals and businesses
-                full control over their digital presence and data sovereignty.
-              </p>
-              <p>
-                Unlike traditional IT service companies, we are transitioning into a
-                product-driven engineering lab — building tools for communication,
-                cybersecurity, and decentralized infrastructure that puts users first.
-              </p>
+            <div className="space-y-4 text-sm text-gray-400 leading-relaxed">
+              <p>We design and build secure digital systems focused on privacy, encryption, and open-source infrastructure. Our goal is to give individuals and businesses full control over their digital presence and data sovereignty.</p>
+              <p>Unlike traditional IT service companies, we are transitioning into a product-driven engineering lab — building tools for communication, cybersecurity, and decentralized infrastructure that puts users first.</p>
             </div>
             <div className="mt-8 grid grid-cols-2 gap-3">
-              {['Privacy-first architecture', 'Open-source development', 'Hybrid services + products', 'Digital sovereignty focus'].map((point, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400" />
-                  <span>{point}</span>
+              {['Privacy-first architecture', 'Open-source development', 'Hybrid services + products', 'Digital sovereignty focus'].map((p, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs text-gray-400">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                  {p}
                 </div>
               ))}
             </div>
           </motion.div>
 
-          {/* Redesigned Founder Card */}
+          {/* Right: Founder Card */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
             whileHover={{ y: -8 }}
-            className="relative"
+            className="relative rounded-2xl overflow-hidden border border-white/[0.08] backdrop-blur-sm"
+            style={{ background: 'rgba(255,255,255,0.03)' }}
           >
-            {/* Card glow effect */}
-            <div className="absolute -inset-0.5 bg-blue-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
+            {/* Gradient top bar */}
+            <div className="h-px" style={{ background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)' }} />
 
-            {/* Main Card */}
-            <div className="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-
-              {/* Top accent bar */}
-              <div className="h-1.5 bg-blue-600" />
-
-              {/* Card Content */}
-              <div className="p-8">
-                {/* Header with image and name */}
-                <div className="flex items-center gap-5 mb-8">
-                  <div className="relative">
-                    {/* Ring effect */}
-                    <div className="absolute inset-0 rounded-full bg-blue-600 blur-md opacity-60 animate-pulse" />
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden ring-4 ring-white dark:ring-gray-800 shadow-lg">
-                      <img
-                        src="/ceo.jpeg"
-                        alt="Muhammad Abdullah Khaver"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                      Muhammad Abdullah Khaver
-                    </h3>
-                    <p className="text-blue-600 dark:text-blue-400 font-medium text-sm mt-1">
-                      Founder & CEO
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                        Active
-                      </span>
-                    </div>
+            <div className="p-8">
+              <div className="flex items-center gap-5 mb-6">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full bg-blue-500 blur-lg opacity-40 animate-pulse" />
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-blue-500/30">
+                    <img src="/ceo.jpeg" alt="Muhammad Abdullah Khaver" className="w-full h-full object-cover" />
                   </div>
                 </div>
-
-                {/* Bio text */}
-                <div className="mb-6">
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    I founded Spurvance Labs to build privacy-first, secure, and open-source digital systems.
-                    My focus is on creating technology that protects users from surveillance and gives complete
-                    control over their data and communication.
-                  </p>
-                </div>
-
-                {/* Stats grid */}
-                <div className="grid grid-cols-3 gap-3 mb-6 pt-4 border-t border-gray-100 dark:border-gray-700">
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-gray-900 dark:text-white">5+</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">Years Exp</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-gray-900 dark:text-white">100%</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">Privacy Focus</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-gray-900 dark:text-white">Open</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">Source</div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Muhammad Abdullah Khaver</h3>
+                  <p className="text-xs text-blue-400 font-medium mt-0.5">Founder & CEO</p>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs text-gray-500">Active</span>
                   </div>
                 </div>
+              </div>
 
-                {/* Expertise tags */}
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-2.5 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full">
-                    Security
-                  </span>
-                  <span className="px-2.5 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full">
-                    Infrastructure
-                  </span>
-                  <span className="px-2.5 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full">
-                    Product Strategy
-                  </span>
-                  <span className="px-2.5 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full">
-                    Open Source
-                  </span>
+              <p className="text-sm text-gray-400 leading-relaxed mb-6">
+                I founded Spurvance Labs to build privacy-first, secure, and open-source digital systems.
+                My focus is on creating technology that protects users from surveillance and gives complete
+                control over their data and communication.
+              </p>
+
+              <div className="grid grid-cols-3 gap-4 mb-6 py-4 border-y border-white/[0.06]">
+                {[['5+', 'Years Exp'], ['100%', 'Privacy Focus'], ['Open', 'Source']].map(([v, l]) => (
+                  <div key={l} className="text-center">
+                    <div className="text-lg font-bold text-white">{v}</div>
+                    <div className="text-xs text-gray-500 mt-0.5">{l}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-6">
+                {['Security', 'Infrastructure', 'Product Strategy', 'Open Source'].map((t) => (
+                  <span key={t} className="px-2.5 py-1 text-xs text-gray-400 rounded-full border border-white/[0.08] bg-white/[0.03]">{t}</span>
+                ))}
+              </div>
+
+              <button
+                onClick={() => { window.location.href = 'mailto:abdullah@spurvancelabs.com?subject=Connect%20with%20Founder'; }}
+                className="group w-full py-3 rounded-xl text-sm font-medium text-white flex items-center justify-center gap-2 transition-all"
+                style={{ background: 'linear-gradient(135deg, #1d4ed8, #4f46e5)', boxShadow: '0 0 20px #3b82f622' }}
+              >
+                Connect with Founder
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── TIMELINE ──────────────────────────────────────────────────────── */}
+      <section className="py-24" style={{ background: 'rgba(255,255,255,0.015)' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <span className="text-xs font-mono tracking-widest text-blue-400 mb-3 block">OUR EVOLUTION</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tighter">The Journey to Digital Freedom</h2>
+          </motion.div>
+
+          <div className="tl-wrapper grid md:grid-cols-3 gap-6">
+            {timeline.map((item, i) => (
+              <motion.div
+                key={i}
+                className="tl-item relative rounded-2xl p-7 overflow-hidden border border-white/[0.06]"
+                style={{ background: 'rgba(255,255,255,0.02)' }}
+                whileHover={{ y: -6, borderColor: `${item.color}44` }}
+                transition={{ duration: 0.3 }}
+              >
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100"
+                  style={{ background: `radial-gradient(circle at top left, ${item.color}08, transparent 60%)` }}
+                />
+                <div className="text-xs font-mono mb-2" style={{ color: item.color }}>{item.year} · {item.label}</div>
+                <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">{item.desc}</p>
+
+                <div className="mt-6 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
+                  <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${item.color}44, transparent)` }} />
                 </div>
+              </motion.div>
+            ))}
+          </div>
 
-                {/* Contact button */}
-                <button
-                  onClick={connectWithFounder}
-                  className=" cursor-pointer w-full mt-6 px-4 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-all flex items-center justify-center gap-2 group"
-                >
-                  <span>Connect with Founder</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+          {/* Quote card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="mt-8 rounded-2xl p-8 border border-white/[0.06]"
+            style={{ background: 'rgba(59,130,246,0.05)' }}
+          >
+            <Quote className="w-8 h-8 text-blue-400 opacity-40 mb-4" />
+            <p className="text-base text-gray-300 leading-relaxed max-w-2xl">
+              "We realized that service alone wasn't enough. The Muslim world needs its own digital
+              infrastructure — secure, private, and free from surveillance."
+            </p>
+            <div className="flex items-center gap-3 mt-5">
+              <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                <Star className="w-4 h-4 text-blue-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-white">Spurvance Labs Team</p>
+                <p className="text-xs text-gray-500">Founding Vision</p>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div ref={timelineRef}>
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-              >
-                <span className="inline-flex items-center gap-2 text-sm font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
-                  <Target className="w-3 h-3" />
-                  OUR EVOLUTION
-                </span>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mt-4 mb-8">
-                  The Journey to Digital Freedom
-                </h2>
-              </motion.div>
+      {/* ── TEAM ──────────────────────────────────────────────────────────── */}
+      <section className="py-24 max-w-7xl mx-auto px-6 lg:px-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <span className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-blue-400 border border-blue-400/20 bg-blue-400/5 px-4 py-2 rounded-full mb-4">
+            <Users className="w-3 h-3" />
+            LEADERSHIP TEAM
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tighter mt-3 mb-3">Meet the Visionaries</h2>
+          <p className="text-gray-500 max-w-xl mx-auto text-sm">
+            A passionate team committed to building a privacy-first digital future.
+          </p>
+        </motion.div>
 
-              <div className="space-y-8 relative before:absolute before:left-3 before:top-0 before:bottom-0 before:w-px before:bg-gray-300 dark:before:bg-gray-700 ml-3">
-                <motion.div
-                  className="timeline-item relative pl-8"
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 border-4 border-white dark:border-gray-900" />
-                  <div className="text-sm font-mono text-gray-500 mb-1">2020</div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">IT-Khaver Founded</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mt-1">Service-based company helping businesses with software solutions and IT consulting.</p>
-                </motion.div>
-
-                <motion.div
-                  className="timeline-item relative pl-8"
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-blue-600 dark:bg-blue-400 border-4 border-white dark:border-gray-900" />
-                  <div className="text-sm font-mono text-blue-600 dark:text-blue-400 mb-1">2025 • EVOLUTION</div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Spurvance Labs</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mt-1">Hybrid model — Services + Products for Digital Pakistan and beyond.</p>
-                </motion.div>
-
-                <motion.div
-                  className="timeline-item relative pl-8"
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-purple-600 dark:bg-purple-400 border-4 border-white dark:border-gray-900" />
-                  <div className="text-sm font-mono text-purple-600 dark:text-purple-400 mb-1">PRESENT & FUTURE</div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Products for Freedom</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mt-1">Building encrypted tools to protect privacy and ensure digital sovereignty for all.</p>
-                </motion.div>
-              </div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm"
-            >
-              <Quote className="w-10 h-10 text-blue-600 dark:text-blue-400 mb-6 opacity-60" />
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg mb-6">
-                "We realized that service alone wasn't enough. The Muslim world needs
-                its own digital infrastructure — secure, private, and free from surveillance."
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
-                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                  <Star className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white text-sm">Spurvance Labs Team</p>
-                  <p className="text-xs text-gray-500">Founding Team</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {team.map((m, i) => <TeamCard key={i} member={m} index={i} />)}
         </div>
       </section>
 
-      {/* Core Values - Improved Cards */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── CORE VALUES ───────────────────────────────────────────────────── */}
+      <section className="py-24" style={{ background: 'rgba(255,255,255,0.015)' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -470,168 +698,147 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 text-sm font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
+            <span className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-blue-400 border border-blue-400/20 bg-blue-400/5 px-4 py-2 rounded-full mb-4">
               <Heart className="w-3 h-3" />
               CORE VALUES
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mt-4 mb-4">
-              What Drives Us
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tighter mt-3 mb-3">What Drives Us</h2>
+            <p className="text-gray-500 max-w-xl mx-auto text-sm">
               These principles guide every product we build and every service we deliver.
             </p>
           </motion.div>
 
-          <div ref={valuesRef} className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -8 }}
-                className="value-card group relative bg-white dark:bg-gray-800/30 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 shadow-sm hover:shadow-lg cursor-pointer"
-              >
-                {/* Icon with animated background */}
-                <div className="relative mb-5">
-                  <div className="absolute inset-0 bg-blue-600/10 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300" />
-                  <div className="relative w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <value.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((v, i) => <ValueCard key={i} v={v} index={i} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ── OFFERINGS (dark glass) ────────────────────────────────────────── */}
+      <section className="py-28 max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-xs font-mono tracking-widest text-blue-400 mb-4 block">OUR OFFERINGS</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tighter mb-8 leading-tight">
+              Products & Services for<br />
+              <span style={{
+                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>Digital Sovereignty</span>
+            </h2>
+            <div className="space-y-5">
+              {[
+                { icon: Shield, text: 'Encrypted communication tools that protect your privacy at every layer.' },
+                { icon: Code, text: 'Enterprise software development built to last and scale with your business.' },
+                { icon: Globe, text: 'Cloud infrastructure and DevOps consulting for reliable, secure systems.' },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex gap-4 group"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500/20 transition-colors">
+                    <item.icon className="w-4 h-4 text-blue-400" />
                   </div>
-                </div>
+                  <p className="text-sm text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors pt-2">{item.text}</p>
+                </motion.div>
+              ))}
+            </div>
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 mt-8 text-sm text-blue-400 hover:text-blue-300 transition-all group"
+            >
+              Explore our products
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
 
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {value.title}
-                </h3>
-
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-                  {value.description}
-                </p>
-
-                {/* Stat badge */}
-                <div className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-2.5 py-1 rounded-full">
-                  <value.statIcon className="w-3 h-3" />
-                  <span>{value.stat}</span>
-                </div>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { value: '100%', label: 'Open Source', icon: Code, color: '#3b82f6' },
+              { value: 'E2E', label: 'Encryption', icon: Shield, color: '#10b981' },
+              { value: 'Zero', label: 'Surveillance', icon: Eye, color: '#8b5cf6' },
+              { value: '🇵🇰', label: 'Made in Pakistan', icon: Award, color: '#f59e0b' },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -6, borderColor: `${item.color}44` }}
+                className="rounded-2xl p-6 text-center border border-white/[0.06] transition-all duration-300 cursor-default"
+                style={{ background: `${item.color}08` }}
+              >
+                <div className="text-2xl font-bold mb-1" style={{ color: item.color }}>{item.value}</div>
+                <div className="text-xs text-gray-500 font-mono tracking-wide">{item.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* What We Build */}
-      <section className="py-24 bg-gray-900 dark:bg-gray-950 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <span className="inline-flex items-center gap-2 text-sm font-mono text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full">
-                <Cpu className="w-3 h-3" />
-                OUR OFFERINGS
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-6 leading-tight">
-                Products & Services for Digital Sovereignty
-              </h2>
-              <div className="space-y-5">
-                {[
-                  { icon: Shield, text: 'Encrypted communication tools that protect your privacy', color: 'text-blue-400' },
-                  { icon: Code, text: 'Enterprise software development for businesses', color: 'text-blue-400' },
-                  { icon: Globe, text: 'Cloud infrastructure and DevOps consulting', color: 'text-blue-400' }
-                ].map((item, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex gap-4 group"
-                  >
-                    <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-blue-500/30 transition-colors">
-                      <item.icon className={`w-3.5 h-3.5 ${item.color}`} />
-                    </div>
-                    <p className="text-gray-300 group-hover:text-white transition-colors">{item.text}</p>
-                  </motion.div>
-                ))}
-              </div>
-              <Link
-                href="/products"
-                className="inline-flex items-center gap-2 mt-8 text-blue-400 hover:text-blue-300 transition-all group"
-              >
-                <span>Explore our products</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="grid grid-cols-2 gap-5"
-            >
-              {[
-                { value: '100%', label: 'Open Source', icon: Code },
-                { value: 'End-to-End', label: 'Encryption', icon: Shield },
-                { value: 'Zero', label: 'Surveillance', icon: Eye },
-                { value: 'Made in', label: 'Pakistan', icon: Award }
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
-                  className="bg-white/5 hover:bg-white/10 p-5 rounded-xl text-center transition-all duration-300 border border-white/10"
-                >
-                  <item.icon className="w-6 h-6 text-blue-400 mx-auto mb-2" />
-                  <div className="text-xl font-bold text-blue-400">{item.value}</div>
-                  <div className="text-xs text-gray-400 mt-1">{item.label}</div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
+      {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
+      <section className="py-32 relative overflow-hidden">
+        {/* Background glow */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[600px] h-[400px] rounded-full blur-[120px] opacity-15"
+            style={{ background: 'radial-gradient(circle, #3b82f6, #8b5cf6, transparent)' }} />
         </div>
-      </section>
 
-      {/* Final CTA */}
-      <section className="py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative max-w-3xl mx-auto px-6 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 text-sm font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-blue-400 border border-blue-400/20 bg-blue-400/5 px-4 py-2 rounded-full mb-8">
               <Sparkles className="w-3 h-3" />
               JOIN THE MOVEMENT
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Join Us in Building Digital Freedom
+
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter mb-5 leading-tight">
+              <span style={{
+                background: 'linear-gradient(135deg, #fff 0%, #94a3b8 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>Build Digital Freedom</span><br />
+              <span style={{
+                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>With Us</span>
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+
+            <p className="text-sm text-gray-500 mb-10 max-w-xl mx-auto leading-relaxed">
               Whether you want to use our products, contribute to open source,
               or need enterprise solutions — we're here to help you take control of your digital future.
             </p>
+
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 href="/products/nat"
-                className="group inline-flex items-center gap-2 px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-all rounded-full shadow-sm hover:shadow-md"
+                className="group inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm font-medium text-white transition-all"
+                style={{ background: 'linear-gradient(135deg, #3b82f6, #6366f1)', boxShadow: '0 0 40px #3b82f633' }}
               >
-                <span>Try NAT Chat</span>
+                Try NAT Chat
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/contact"
-                className="group inline-flex items-center gap-2 px-8 py-3 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:border-gray-900 dark:hover:border-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-full"
+                className="group inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm font-medium text-gray-300 border border-white/10 hover:border-white/30 hover:text-white transition-all"
               >
-                <span>Work With Us</span>
+                Work With Us
                 <Heart className="w-4 h-4 group-hover:scale-110 transition-transform" />
               </Link>
             </div>
@@ -639,6 +846,7 @@ const AboutPage = () => {
         </div>
       </section>
 
+      {/* Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -648,13 +856,9 @@ const AboutPage = () => {
             mainEntity: {
               "@type": "Organization",
               name: "Spurvance Labs",
-              description:
-                "A Pakistan-based privacy-first software company building encrypted tools and enterprise solutions.",
+              description: "A Pakistan-based privacy-first software company building encrypted tools and enterprise solutions.",
               foundingDate: "2020",
-              founder: {
-                "@type": "Person",
-                name: "Muhammad Abdullah Khaver",
-              },
+              founder: { "@type": "Person", name: "Muhammad Abdullah Khaver" },
             },
           }),
         }}

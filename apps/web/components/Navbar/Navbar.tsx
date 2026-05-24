@@ -52,7 +52,7 @@ const navItems: NavItem[] = [
   { name: 'Home', path: '/', icon: <Home size={16} strokeWidth={1.5} /> },
   { name: 'About', path: '/about', icon: <Info size={16} strokeWidth={1.5} /> },
   { name: 'Services', path: '/services', icon: <Briefcase size={16} strokeWidth={1.5} /> },
-  { name: 'Courses', path: '/cources', icon: <GraduationCap size={16} strokeWidth={1.5} /> },
+  { name: 'Courses', path: '/courses', icon: <GraduationCap size={16} strokeWidth={1.5} /> },
   { name: 'Internships', path: '/internship', icon: <Zap size={16} strokeWidth={1.5} /> },
   { name: 'Contact', path: '/contact', icon: <Mail size={16} strokeWidth={1.5} /> },
 ];

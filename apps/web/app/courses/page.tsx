@@ -93,16 +93,12 @@ Regards.
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
-   METADATA
-────────────────────────────────────────────────────────────────────────── */
-
-/* ──────────────────────────────────────────────────────────────────────────
    DATA
 ────────────────────────────────────────────────────────────────────────── */
 
 const courses: Course[] = [
   {
-    id: 'fullstack-web',
+    id: 'full-stack-web-dev',
     icon: <Code2 size={22} strokeWidth={1.5} />,
     title: 'Full Stack Web Development',
     category: 'Development',
@@ -121,7 +117,7 @@ const courses: Course[] = [
       'Node.js',
     ],
     featured: true,
-    instructor: 'Ahmad Raza',
+    instructor: 'Muhammad Abdullah',
     lessons: 48,
     available: true,
   },
@@ -142,7 +138,7 @@ const courses: Course[] = [
       'Ethical Hacking',
       'Penetration Testing',
     ],
-    instructor: 'Fatima Khan',
+    instructor: 'Abdullah Khaver',
     lessons: 36,
     available: false,
   },
@@ -159,7 +155,7 @@ const courses: Course[] = [
     description:
       'Build cross-platform mobile apps using React Native and Expo.',
     topics: ['React Native', 'Expo', 'Navigation'],
-    instructor: 'Usman Ali',
+    instructor: 'Muhammad Abdullah',
     lessons: 40,
     available: true,
   },
@@ -176,7 +172,7 @@ const courses: Course[] = [
     description:
       'Learn Python from scratch including APIs, automation, and Django.',
     topics: ['Python', 'OOP', 'Django', 'APIs'],
-    instructor: 'Sarah Chen',
+    instructor: 'Muhammad Hamza',
     lessons: 32,
     available: true,
   },
@@ -192,7 +188,7 @@ const courses: Course[] = [
     description:
       'Deep dive into neural networks, NLP, and production ML systems.',
     topics: ['TensorFlow', 'NLP', 'Computer Vision'],
-    instructor: 'Dr. Imran Sheikh',
+    instructor: 'Muhammad Hamza',
     lessons: 64,
     available: false,
   },
@@ -209,7 +205,7 @@ const courses: Course[] = [
     description:
       'Master Docker, Kubernetes, CI/CD, and scalable infrastructure.',
     topics: ['Docker', 'Kubernetes', 'CI/CD'],
-    instructor: 'Marcus Johnson',
+    instructor: 'Abdullah Khaver',
     lessons: 38,
     available: true,
   },
@@ -267,6 +263,9 @@ function CourseCard({
   index: number;
   onEnroll: (course: Course) => void;
 }) {
+  // Check if the course is the Web Dev course (by id)
+  const isWebDevCourse = course.id === 'full-stack-web-dev';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 25 }}
@@ -351,22 +350,29 @@ function CourseCard({
               </div>
             </div>
 
-            {course.available ? (
-              <button
-                onClick={() => onEnroll(course)}
+            {isWebDevCourse ? (
+              <Link
+                href={`/courses/${course.id}`}
                 className="inline-flex cursor-pointer items-center gap-1 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:opacity-80 transition-opacity group/link"
               >
-                Enroll Now
-
+                View Details
                 <ArrowUpRight
                   size={14}
                   className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform"
                 />
-              </button>
+              </Link>
             ) : (
-              <span className="text-xs font-medium text-amber-500">
-                Coming Soon
-              </span>
+              <div className="text-right">
+                <button
+                  disabled
+                  className="inline-flex cursor-not-allowed items-center gap-1 text-sm font-medium text-gray-400 dark:text-gray-500"
+                >
+                  Enroll Now
+                </button>
+                <div className="text-[10px] font-medium text-amber-500 mt-0.5">
+                  Seats are full
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -382,6 +388,9 @@ function FeaturedCourse({
   course: Course;
   onEnroll: (course: Course) => void;
 }) {
+  // Featured course is the Web Dev course, so it should have the View Details button
+  const isWebDevCourse = course.id === 'full-stack-web-dev';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -447,21 +456,20 @@ function FeaturedCourse({
             </div>
 
             <div className="flex flex-wrap items-center gap-5">
-              {course.available ? (
-                <button
-                  onClick={() => onEnroll(course)}
+              {isWebDevCourse ? (
+                <Link
+                  href={`/courses/${course.id}`}
                   className="inline-flex cursor-pointer items-center gap-2.5 px-7 py-3.5 bg-white text-gray-950 text-sm font-semibold rounded-xl hover:bg-gray-100 transition-all"
                 >
-                  Enroll via WhatsApp
-
+                  View Details
                   <ArrowRight
                     size={16}
                     strokeWidth={2.5}
                   />
-                </button>
+                </Link>
               ) : (
                 <div className="px-5 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm">
-                  Enrollment Opening Soon
+                  Seats are full
                 </div>
               )}
 

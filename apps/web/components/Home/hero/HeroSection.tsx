@@ -94,10 +94,10 @@ export default function HeroSection() {
             className="flex flex-wrap justify-center items-center gap-4"
           >
             <Link
-              href="/products"
+              href="/courses"
               className="group inline-flex items-center gap-2.5 px-8 py-4 bg-white text-gray-950 text-sm font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300"
             >
-              Explore Our Work
+              Courses
               <ArrowRight size={16} />
             </Link>
 

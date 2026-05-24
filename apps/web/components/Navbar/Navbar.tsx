@@ -48,20 +48,9 @@ interface NavItem {
 }
 
 // ========== CONSTANTS ==========
-const productsDropdown: DropdownItem[] = [
-  {
-    name: 'NAT',
-    description: 'Secure encrypted messaging for teams',
-    path: '/products/nat',
-    badge: 'V1',
-    icon: <Zap size={16} strokeWidth={1.5} />,
-  },
-];
-
 const navItems: NavItem[] = [
   { name: 'Home', path: '/', icon: <Home size={16} strokeWidth={1.5} /> },
   { name: 'About', path: '/about', icon: <Info size={16} strokeWidth={1.5} /> },
-  // { name: 'Products', path: '#', hasDropdown: true, dropdown: productsDropdown, icon: <FolderOpen size={16} strokeWidth={1.5} /> },
   { name: 'Services', path: '/services', icon: <Briefcase size={16} strokeWidth={1.5} /> },
   { name: 'Courses', path: '/cources', icon: <GraduationCap size={16} strokeWidth={1.5} /> },
   { name: 'Internships', path: '/internship', icon: <Zap size={16} strokeWidth={1.5} /> },

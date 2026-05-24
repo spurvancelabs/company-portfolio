@@ -15,16 +15,18 @@ export default function FeaturesSection() {
   useGSAP(() => {
     const cards = sectionRef.current?.querySelectorAll('.feature-card');
 
-    gsap.fromTo(
-      cards,
-      { opacity: 0, y: 60 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.1,
-        duration: 0.8,
-      }
-    );
+    if (cards) {
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          duration: 0.8,
+        }
+      );
+    }
   }, { scope: sectionRef });
 
   return (

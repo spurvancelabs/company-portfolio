@@ -1,15 +1,8 @@
-/*
- * SPDX-License-Identifier: AGPL-3.0-or-later
- * Copyright (c) 2026 Spurvance Labs
- *
- * Open-source software provided by Spurvance Labs.
- * See LICENSE file for details.
- */
+'use client';
 
 import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import type { Metadata } from 'next';
 import {
   Heart,
   Send,
@@ -40,40 +33,6 @@ import {
   Check,
   X
 } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: "Internship Program | Spurvance Labs | Launch Your Tech Career",
-  description: "Join Spurvance Labs internship program. Work on production systems, get mentored by industry veterans, and launch your tech career. 6 programs available.",
-  keywords: [
-    "internship",
-    "tech internship",
-    "DevOps",
-    "web development",
-    "machine learning",
-    "product design",
-    "Pakistan",
-    "career"
-  ],
-  openGraph: {
-    title: "Internship Program | Spurvance Labs | Launch Your Tech Career",
-    description: "Join our internship program. Work on production systems, get mentored by industry veterans. 6 programs available.",
-    type: "website",
-    url: "https://spurvancelabs.com/internship/",
-    images: [
-      {
-        url: "https://spurvancelabs.com/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Spurvance Labs Internship Program",
-      }
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Internship Program | Spurvance Labs | Launch Your Tech Career",
-    description: "Join our internship program. Work on production systems, get mentored by industry veterans.",
-  },
-};
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -702,7 +661,6 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
 
 // ─── Page Component ────────────────────────────────────────────────────────────
 
-'use client';
 
 export default function Internship() {
   return (

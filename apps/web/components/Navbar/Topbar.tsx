@@ -88,20 +88,6 @@ const TopBar = () => {
                     <span className="font-bold text-white">"NAT"</span>{' '}
                     is now live!
                   </span>
-
-                  {/* CTA Link */}
-                  <Link
-                    href="/products/nat"
-                    className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white text-[13px] font-semibold transition-all duration-300 border border-white/20 hover:border-white/30"
-                  >
-                    <span>Explore</span>
-                    <motion.span
-                      animate={{ x: [0, 3, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                    >
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </motion.span>
-                  </Link>
                 </div>
 
                 {/* Dismiss button */}

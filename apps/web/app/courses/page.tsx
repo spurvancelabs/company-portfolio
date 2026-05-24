@@ -1,7 +1,4 @@
-/*
- * SPDX-License-Identifier: AGPL-3.0-or-later
- * Copyright (c) 2026 Spurvance Labs
- */
+'use client';
 
 import React, { useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -11,7 +8,6 @@ import {
   useTransform,
   AnimatePresence,
 } from 'framer-motion';
-import type { Metadata } from 'next';
 
 import {
   Search,
@@ -99,40 +95,6 @@ Regards.
 /* ──────────────────────────────────────────────────────────────────────────
    METADATA
 ────────────────────────────────────────────────────────────────────────── */
-
-export const metadata: Metadata = {
-  title: "Courses | Spurvance Labs | Tech Training & Bootcamps",
-  description: "Industry-focused tech courses: Full Stack Development, DevOps, Machine Learning, Growth Marketing, Product Design, and Cybersecurity. Mentorship included.",
-  keywords: [
-    "tech courses",
-    "bootcamp",
-    "DevOps training",
-    "web development",
-    "machine learning",
-    "cybersecurity",
-    "product design",
-    "Pakistan"
-  ],
-  openGraph: {
-    title: "Courses | Spurvance Labs | Tech Training & Bootcamps",
-    description: "Industry-focused tech courses with mentorship. DevOps, development, ML, design, and security training.",
-    type: "website",
-    url: "https://spurvancelabs.com/cources",
-    images: [
-      {
-        url: "https://spurvancelabs.com/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Spurvance Labs Courses",
-      }
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Courses | Spurvance Labs | Tech Training & Bootcamps",
-    description: "Industry-focused tech courses with mentorship. DevOps, development, ML, design, and security.",
-  },
-};
 
 /* ──────────────────────────────────────────────────────────────────────────
    DATA
@@ -535,7 +497,6 @@ function FeaturedCourse({
    PAGE
 ────────────────────────────────────────────────────────────────────────── */
 
-'use client';
 
 export default function Courses() {
   const [selectedCategory, setSelectedCategory] =

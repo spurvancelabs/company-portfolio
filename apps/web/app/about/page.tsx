@@ -240,7 +240,7 @@ function TeamCard({ member, index }: { member: typeof team[0]; index: number }) 
             style={{ background: member.accent }}
           />
           <div className="relative w-full h-full rounded-full overflow-hidden ring-2"
-            style={{ ringColor: `${member.accent}44` }}>
+            style={{ borderColor: `${member.accent}44` }}>
             <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
           </div>
         </div>
@@ -411,11 +411,11 @@ const AboutPage = () => {
 
             <div className="gsap-reveal flex flex-wrap items-center gap-4 mt-10">
               <Link
-                href="/products/nat"
+                href="/services"
                 className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium text-white transition-all"
                 style={{ background: 'linear-gradient(135deg, #3b82f6, #6366f1)', boxShadow: '0 0 30px #3b82f644' }}
               >
-                Try NAT Chat
+                Explore Our Services
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
@@ -827,11 +827,11 @@ const AboutPage = () => {
 
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
-                href="/products/nat"
+                href="/services"
                 className="group inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm font-medium text-white transition-all"
                 style={{ background: 'linear-gradient(135deg, #3b82f6, #6366f1)', boxShadow: '0 0 40px #3b82f633' }}
               >
-                Try NAT Chat
+                Explore Our Services
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link

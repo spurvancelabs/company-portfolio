@@ -107,60 +107,60 @@ const internshipPrograms: InternshipProgram[] = [
     type: 'Free',
     description: 'Master full-stack development with React, Next.js, Node.js, and modern cloud-native architectures. Build production-ready applications.',
     skills: ['React', 'Next.js', 'Node.js', 'TypeScript', 'PostgreSQL', 'AWS'],
-    duration: '12 weeks',
-    spots: '12',
+    duration: '4 weeks',
+    spots: '20',
     level: 'Entry'
   },
-  {
-    icon: <Zap size={22} strokeWidth={1.5} />,
-    title: 'DevOps & Cloud Engineering',
-    type: 'Paid',
-    description: 'Design and implement CI/CD pipelines, container orchestration, and infrastructure-as-code solutions for enterprise environments.',
-    skills: ['Docker', 'Kubernetes', 'Terraform', 'AWS', 'GitHub Actions', 'Linux'],
-    duration: '16 weeks',
-    spots: '6',
-    level: 'Intermediate'
-  },
-  {
-    icon: <Brain size={22} strokeWidth={1.5} />,
-    title: 'Machine Learning Engineering',
-    type: 'Paid',
-    description: 'Develop and deploy ML models at scale. Work on NLP, computer vision, and recommendation systems with production-grade MLOps.',
-    skills: ['Python', 'TensorFlow', 'PyTorch', 'MLOps', 'NLP', 'Computer Vision'],
-    duration: '20 weeks',
-    spots: '4',
-    level: 'Advanced'
-  },
-  {
-    icon: <BarChart3 size={22} strokeWidth={1.5} />,
-    title: 'Growth Marketing',
-    type: 'Free',
-    description: 'Drive user acquisition and retention through data-driven marketing strategies, SEO optimization, and conversion rate optimization.',
-    skills: ['SEO/SEM', 'Analytics', 'Content Strategy', 'A/B Testing', 'PPC', 'CRM'],
-    duration: '8 weeks',
-    spots: '15',
-    level: 'Entry'
-  },
-  {
-    icon: <Palette size={22} strokeWidth={1.5} />,
-    title: 'Product Design',
-    type: 'Free',
-    description: 'Create intuitive user experiences and design systems. From research and wireframing to high-fidelity prototypes and design handoff.',
-    skills: ['Figma', 'Design Systems', 'User Research', 'Prototyping', 'Typography', 'Accessibility'],
-    duration: '12 weeks',
-    spots: '10',
-    level: 'Entry'
-  },
-  {
-    icon: <Shield size={22} strokeWidth={1.5} />,
-    title: 'Cybersecurity Operations',
-    type: 'Paid',
-    description: 'Protect digital assets through threat detection, incident response, and security architecture design for modern cloud environments.',
-    skills: ['SIEM', 'Penetration Testing', 'Cloud Security', 'Incident Response', 'Cryptography', 'Compliance'],
-    duration: '16 weeks',
-    spots: '5',
-    level: 'Intermediate'
-  }
+  // {
+  //   icon: <Zap size={22} strokeWidth={1.5} />,
+  //   title: 'DevOps & Cloud Engineering',
+  //   type: 'Paid',
+  //   description: 'Design and implement CI/CD pipelines, container orchestration, and infrastructure-as-code solutions for enterprise environments.',
+  //   skills: ['Docker', 'Kubernetes', 'Terraform', 'AWS', 'GitHub Actions', 'Linux'],
+  //   duration: '16 weeks',
+  //   spots: '6',
+  //   level: 'Intermediate'
+  // },
+  // {
+  //   icon: <Brain size={22} strokeWidth={1.5} />,
+  //   title: 'Machine Learning Engineering',
+  //   type: 'Paid',
+  //   description: 'Develop and deploy ML models at scale. Work on NLP, computer vision, and recommendation systems with production-grade MLOps.',
+  //   skills: ['Python', 'TensorFlow', 'PyTorch', 'MLOps', 'NLP', 'Computer Vision'],
+  //   duration: '20 weeks',
+  //   spots: '4',
+  //   level: 'Advanced'
+  // },
+  // {
+  //   icon: <BarChart3 size={22} strokeWidth={1.5} />,
+  //   title: 'Growth Marketing',
+  //   type: 'Free',
+  //   description: 'Drive user acquisition and retention through data-driven marketing strategies, SEO optimization, and conversion rate optimization.',
+  //   skills: ['SEO/SEM', 'Analytics', 'Content Strategy', 'A/B Testing', 'PPC', 'CRM'],
+  //   duration: '8 weeks',
+  //   spots: '15',
+  //   level: 'Entry'
+  // },
+  // {
+  //   icon: <Palette size={22} strokeWidth={1.5} />,
+  //   title: 'Product Design',
+  //   type: 'Free',
+  //   description: 'Create intuitive user experiences and design systems. From research and wireframing to high-fidelity prototypes and design handoff.',
+  //   skills: ['Figma', 'Design Systems', 'User Research', 'Prototyping', 'Typography', 'Accessibility'],
+  //   duration: '12 weeks',
+  //   spots: '10',
+  //   level: 'Entry'
+  // },
+  // {
+  //   icon: <Shield size={22} strokeWidth={1.5} />,
+  //   title: 'Cybersecurity Operations',
+  //   type: 'Paid',
+  //   description: 'Protect digital assets through threat detection, incident response, and security architecture design for modern cloud environments.',
+  //   skills: ['SIEM', 'Penetration Testing', 'Cloud Security', 'Incident Response', 'Cryptography', 'Compliance'],
+  //   duration: '16 weeks',
+  //   spots: '5',
+  //   level: 'Intermediate'
+  // }
 ];
 
 const benefits: Benefit[] = [

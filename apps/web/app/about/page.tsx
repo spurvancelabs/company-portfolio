@@ -586,8 +586,8 @@ const AboutPage = () => {
               </div>
 
               <button
-                onClick={() => { window.location.href = 'mailto:abdullah@spurvancelabs.com?subject=Connect%20with%20Founder'; }}
-                className="group w-full py-3 rounded-xl text-sm font-medium text-white flex items-center justify-center gap-2 transition-all"
+                onClick={() => { window.location.href = 'mailto:abdullahkhaver@spurvancelabs.com?subject=Connect%20with%20Founder'; }}
+                className="cursor-pointer group w-full py-3 rounded-xl text-sm font-medium text-white flex items-center justify-center gap-2 transition-all"
                 style={{ background: 'linear-gradient(135deg, #1d4ed8, #4f46e5)', boxShadow: '0 0 20px #3b82f622' }}
               >
                 Connect with Founder
@@ -665,7 +665,7 @@ const AboutPage = () => {
       </section>
 
       {/* ── TEAM ──────────────────────────────────────────────────────────── */}
-      <section className="py-24 max-w-7xl mx-auto px-6 lg:px-12">
+      {/* <section className="py-24 max-w-7xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -686,7 +686,7 @@ const AboutPage = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {team.map((m, i) => <TeamCard key={i} member={m} index={i} />)}
         </div>
-      </section>
+      </section> */}
 
       {/* ── CORE VALUES ───────────────────────────────────────────────────── */}
       <section className="py-24" style={{ background: 'rgba(255,255,255,0.015)' }}>
@@ -715,7 +715,7 @@ const AboutPage = () => {
       </section>
 
       {/* ── OFFERINGS (dark glass) ────────────────────────────────────────── */}
-      <section className="py-28 max-w-7xl mx-auto px-6 lg:px-12">
+      {/* <section className="py-28 max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -785,7 +785,7 @@ const AboutPage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
       <section className="py-32 relative overflow-hidden">

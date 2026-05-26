@@ -105,12 +105,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SmoothScrollProvider>
+        {/* <SmoothScrollProvider> */}
          <BackToTop />
        <NavbarWithErrorBoundary/>
         <main>{children}</main>
         <Footer />
-      </SmoothScrollProvider>
+      {/* </SmoothScrollProvider> */}
       </body>
     </html>
   );

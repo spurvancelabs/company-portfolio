@@ -103,7 +103,7 @@ const courses: Course[] = [
     title: 'Full Stack Web Development',
     category: 'Development',
     level: 'Beginner',
-    price: 10000,
+    price: 20000,
     duration: '12 weeks',
     students: 120,
     rating: 4.8,
@@ -481,17 +481,18 @@ function FeaturedCourse({
 
           {/* VISUAL */}
           <div className="flex-shrink-0">
-            <div className="relative w-56 h-56">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border border-white/10" />
+            <div className="relative w-70 h-70">
+              {/* <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border border-white/10" /> */}
 
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
+                <img src="/course-banner.jpeg" alt="" />
+                {/* <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
                   <Play
                     size={32}
                     className="text-white ml-1"
                     fill="white"
-                  />
-                </div>
+                  /> */}
+                {/* </div> */}
               </div>
             </div>
           </div>

@@ -499,104 +499,11 @@ const AboutPage = () => {
       </section>
 
       {/* ── WHO WE ARE + FOUNDER ──────────────────────────────────────────── */}
-      <section className="py-20 max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+      {/* <section className="py-20 max-w-7xl mx-auto px-6 lg:px-12"> */}
+        {/* <div className="grid lg:grid-cols-2 gap-16 items-start"> */}
 
-          {/* Left: Identity */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-          >
-            <span className="text-xs font-mono tracking-widest text-blue-400 mb-4 block">WHO WE ARE</span>
-            <h2 className="text-3xl sm:text-4xl font-bold leading-tight tracking-tighter mb-6">
-              A{' '}
-              <span style={{
-                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}>Privacy-First</span>{' '}
-              Software Company
-            </h2>
-            <div className="space-y-4 text-sm text-gray-400 leading-relaxed">
-              <p>We design and build secure digital systems focused on privacy, encryption, and open-source infrastructure. Our goal is to give individuals and businesses full control over their digital presence and data sovereignty.</p>
-              <p>Unlike traditional IT service companies, we are transitioning into a product-driven engineering lab — building tools for communication, cybersecurity, and decentralized infrastructure that puts users first.</p>
-            </div>
-            <div className="mt-8 grid grid-cols-2 gap-3">
-              {['Privacy-first architecture', 'Open-source development', 'Hybrid services + products', 'Digital sovereignty focus'].map((p, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs text-gray-400">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
-                  {p}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Right: Founder Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            whileHover={{ y: -8 }}
-            className="relative rounded-2xl overflow-hidden border border-white/[0.08] backdrop-blur-sm"
-            style={{ background: 'rgba(255,255,255,0.03)' }}
-          >
-            {/* Gradient top bar */}
-            <div className="h-px" style={{ background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)' }} />
-
-            <div className="p-8">
-              <div className="flex items-center gap-5 mb-6">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-full bg-blue-500 blur-lg opacity-40 animate-pulse" />
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-blue-500/30">
-                    <img src="/ceo.jpeg" alt="Muhammad Abdullah Khaver" className="w-full h-full object-cover" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Muhammad Abdullah Khaver</h3>
-                  <p className="text-xs text-blue-400 font-medium mt-0.5">Founder & CEO</p>
-                  <div className="flex items-center gap-1.5 mt-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-xs text-gray-500">Active</span>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-sm text-gray-400 leading-relaxed mb-6">
-                I founded Spurvance Labs to build privacy-first, secure, and open-source digital systems.
-                My focus is on creating technology that protects users from surveillance and gives complete
-                control over their data and communication.
-              </p>
-
-              <div className="grid grid-cols-3 gap-4 mb-6 py-4 border-y border-white/[0.06]">
-                {[['5+', 'Years Exp'], ['100%', 'Privacy Focus'], ['Open', 'Source']].map(([v, l]) => (
-                  <div key={l} className="text-center">
-                    <div className="text-lg font-bold text-white">{v}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">{l}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-wrap gap-2 mb-6">
-                {['Security', 'Infrastructure', 'Product Strategy', 'Open Source'].map((t) => (
-                  <span key={t} className="px-2.5 py-1 text-xs text-gray-400 rounded-full border border-white/[0.08] bg-white/[0.03]">{t}</span>
-                ))}
-              </div>
-
-              <button
-                onClick={() => { window.location.href = 'mailto:abdullahkhaver@spurvancelabs.com?subject=Connect%20with%20Founder'; }}
-                className="cursor-pointer group w-full py-3 rounded-xl text-sm font-medium text-white flex items-center justify-center gap-2 transition-all"
-                style={{ background: 'linear-gradient(135deg, #1d4ed8, #4f46e5)', boxShadow: '0 0 20px #3b82f622' }}
-              >
-                Connect with Founder
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+        {/* </div> */}
+      {/* </section> */}
 
       {/* ── TIMELINE ──────────────────────────────────────────────────────── */}
       <section className="py-24" style={{ background: 'rgba(255,255,255,0.015)' }}>

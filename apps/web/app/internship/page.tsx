@@ -496,8 +496,9 @@ const handleSubmit = async (e: React.FormEvent) => {
       </div>
 
       <button
+        disabled
         type="submit"
-        disabled={isSubmitting}
+        // disabled={isSubmitting}
         className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-sm transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed group shadow-lg shadow-gray-900/10 dark:shadow-white/10"
       >
         {isSubmitting ? (
